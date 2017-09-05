@@ -50,3 +50,20 @@ class TestDatabaseService(BaseTest):
         results = curr.fetchall()
         self.assertEqual(1, results[0][0])
         curr.close()
+
+
+    def test_database_service_saves_user_with_correct_username(self):
+        username = 'testuser'
+        password = 'testpass'
+
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        query = "SELECT username FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(username, results[0][0])
+        curr.close()

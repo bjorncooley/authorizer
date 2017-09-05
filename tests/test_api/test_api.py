@@ -80,3 +80,4 @@ class TestAPI(BaseTest):
         curr.execute(query)
         results = curr.fetchall()
         self.assertEqual(username, results[0][0])
+
