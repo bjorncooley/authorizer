@@ -10,3 +10,6 @@ class TestAPI(BaseTest):
     def tearDown(self):
         super(TestAPI, self).tearDown()
 
+    def test_healthcheck_returns_200(self):
+        response = self.app.get("/health-check")
+        self.assertEqual(200, response.status_code)
