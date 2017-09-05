@@ -1,5 +1,5 @@
 from tests.base import BaseTest
-
+from services.database_service import DatabaseService
 
 class TestDatabaseService(BaseTest):
 
