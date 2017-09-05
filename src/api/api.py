@@ -23,7 +23,10 @@ def create_user():
     except TypeError:
         return make_response("Data must be convertible to JSON", 422)
 
-    if "username" not in parsedData or "password" not in parsedData:
+    try:
+        username = parsedData["username"]
+        password = parsedData["password"]
+    except KeyError:
         return make_response("Username and password are required parameters", 422)
 
     return make_response("OK", 200)
