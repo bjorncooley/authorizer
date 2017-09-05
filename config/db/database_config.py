@@ -1,8 +1,12 @@
 import os
 import sqlalchemy
 from sqlalchemy import (
+    Column,
     create_engine,
+    Integer,
     MetaData,
+    String,
+    Table,
 )
 
 LOCAL_DBUSER = "local_admin"
@@ -29,3 +33,18 @@ class DatabaseConfig:
         )
         self.engine = create_engine(connection_string)
         self.metadata = MetaData()
+
+        self.users = Table('users', self.metadata,
+            Column('cohort', Integer),
+            Column('first_name', String),
+            Column('id', Integer, primary_key=True),
+            Column('last_name', String),
+            Column('password', String),
+            Column('salesforce_id', String),
+            Column('salt', String),
+            Column('username', String),
+            Column('user_type', String),
+        )
+
+    def create_tables(self):
+        self.metadata.create_all(self.engine)
