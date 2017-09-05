@@ -1,4 +1,4 @@
-from config.database_config import DatabaseConfig
+from config.db.database_config import DatabaseConfig
 
 
 class DatabaseService:
