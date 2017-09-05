@@ -1,7 +1,9 @@
 from flask import (
     Flask,
     make_response,
+    request,
 )
+import json
 
 app = Flask(__name__)
 
@@ -12,4 +14,8 @@ def health_check():
 
 @app.route("/api/v1/create-user", methods=["POST"])
 def create_user():
+    data = request.data
+    if not data:
+        return make_response("Request parameters must not be empty", 422)
+
     return make_response("OK", 200)
