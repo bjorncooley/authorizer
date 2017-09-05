@@ -13,3 +13,7 @@ class TestAPI(BaseTest):
     def test_health_check_returns_200(self):
         response = self.app.get("/health-check")
         self.assertEqual(200, response.status_code)
+
+    def test_create_user_returns_200(self):
+        response = self.app.get("/create-user")
+        self.assertEqual(200, response.status_code)
