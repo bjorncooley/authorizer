@@ -18,4 +18,12 @@ def create_user():
     if not data:
         return make_response("Request parameters must not be empty", 422)
 
+    try:
+        parsedData = json.loads(data)
+    except TypeError:
+        return make_response("Data must be convertible to JSON", 422)
+
+    if "username" not in parsedData or "password" not in parsedData:
+        return make_response("Username and password are required parameters", 422)
+
     return make_response("OK", 200)
