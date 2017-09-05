@@ -116,6 +116,6 @@ class TestDatabaseService(BaseTest):
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertTrue(check_password_hash(results[0][0], first_name))
-        self.assertTrue(check_password_hash(results[0][1], last_name))
+        self.assertEqual(first_name, results[0][0])
+        self.assertEqual(last_name, results[0][1])
         curr.close()
