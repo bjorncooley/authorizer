@@ -28,3 +28,9 @@ class TestAPI(BaseTest):
     def test_create_user_returns_422_with_missing_data(self):
         response = self.app.post("/api/v1/create-user")
         self.assertEqual(422, response.status_code)
+
+
+    def test_create_user_returns_422_for_incorrectly_formatted_data(self):
+        data = {'username': 'testuser', 'password': 'testpass'}
+        response = self.app.post("/api/v1/create-user", data=data)
+        self.assertEqual(422, response.status_code)
