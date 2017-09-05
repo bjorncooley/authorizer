@@ -15,5 +15,5 @@ class TestAPI(BaseTest):
         self.assertEqual(200, response.status_code)
 
     def test_create_user_returns_200(self):
-        response = self.app.get("/create-user")
+        response = self.app.post("/create-user")
         self.assertEqual(200, response.status_code)
