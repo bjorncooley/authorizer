@@ -29,4 +29,7 @@ def create_user():
     except KeyError:
         return make_response("Username and password are required parameters", 422)
 
+    if len(username) == 0 or len(password) == 0:
+        return make_response("Username and password cannot be blank", 422)
+
     return make_response("OK", 200)
