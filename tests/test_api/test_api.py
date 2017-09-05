@@ -67,7 +67,7 @@ class TestAPI(BaseTest):
         self.assertEqual(1, results[0][0])
 
 
-    def test_create_user_creates_user_with_correct_data(self):
+    def test_create_user_creates_user_with_correct_username(self):
 
         username = "testuser"
         password = "testpass"
@@ -80,4 +80,3 @@ class TestAPI(BaseTest):
         curr.execute(query)
         results = curr.fetchall()
         self.assertEqual(username, results[0][0])
-        self.assertEqual(password, results[0][1])
