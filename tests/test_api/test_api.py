@@ -54,3 +54,15 @@ class TestAPI(BaseTest):
         data = json.dumps({"username": "", "password": "testpass"})
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(422, response.status_code)
+
+
+    def test_create_user_creates_new_user(self):
+        data = json.dumps({"username": "testuser", "pasvword": "testpass"})
+        self.app.post("/api/v1/create-user", data=data)
+
+        query = "SELECT COUNT(*) FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(1, results[0][0])
+
