@@ -66,3 +66,18 @@ class TestAPI(BaseTest):
         results = curr.fetchall()
         self.assertEqual(1, results[0][0])
 
+
+    def test_create_user_creates_user_with_correct_data(self):
+
+        username = "testuser"
+        password = "testpass"
+
+        data = json.dumps({"username": username, "password": password})
+        self.app.post("/api/v1/create-user", data=data)
+
+        query = "SELECT username, password FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(username, results[0][0])
+        self.assertEqual(password, results[0][1])
