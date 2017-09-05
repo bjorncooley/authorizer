@@ -1,11 +1,27 @@
+import psycopg2
+
 from tests.base import BaseTest
 from services.database_service import DatabaseService
+
+from config.db.database_config import (
+    LOCAL_DBUSER,
+    LOCAL_DBPASS,
+    LOCAL_DBHOST,
+    LOCAL_DBNAME
+)
+DBPORT = "5432"
 
 class TestDatabaseService(BaseTest):
 
     def setUp(self):
         super(TestDatabaseService, self).setUp()
         self.db = DatabaseService()
+
+        conn = psycopg2.connect(
+        "dbname={0} user={1} password={2} host={3} port={4}".format(
+        LOCAL_DBNAME, LOCAL_DBUSER, LOCAL_DBPASS, LOCAL_DBHOST, DBPORT
+        ))
+        self.curr = conn.cursor()
 
 
     def tearDown(self):
@@ -14,3 +30,18 @@ class TestDatabaseService(BaseTest):
 
     def test_database_service_can_connect(self):
         self.assertIsNotNone(self.db)
+
+
+    def test_database_service_can_save_user(self):
+        username = 'testuser'
+        password = 'testpass'
+
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        query = "SELECT COUNT(*) FROM users"
+        self.curr.execute(query)
+        results = self.curr.fetchall()
+        self.assertEqual(1, results[0][0])
