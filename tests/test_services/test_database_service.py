@@ -67,3 +67,20 @@ class TestDatabaseService(BaseTest):
         results = curr.fetchall()
         self.assertEqual(username, results[0][0])
         curr.close()
+
+
+    def test_database_service_saves_hashed_password(self):
+        username = 'testuser'
+        password = 'testpass'
+
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        query = "SELECT password FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertNotEqual(password, results[0][0])
+        curr.close()
