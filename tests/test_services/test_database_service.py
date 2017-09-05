@@ -119,3 +119,20 @@ class TestDatabaseService(BaseTest):
         self.assertEqual(first_name, results[0][0])
         self.assertEqual(last_name, results[0][1])
         curr.close()
+
+
+    def test_database_service_handles_default_values_for_first_and_last_name(self):
+        username = 'testuser'
+        password = 'testpass'
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        query = "SELECT first_name, last_name FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(None, results[0][0])
+        self.assertEqual(None, results[0][1])
+        curr.close()
