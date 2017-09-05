@@ -20,4 +20,8 @@ class TestAPI(BaseTest):
     def test_create_user_returns_200(self):
         response = self.app.post("/api/v1/create-user")
         self.assertEqual(200, response.status_code)
-    
+
+
+    def test_create_user_returns_422_with_missing_data(self):
+        response = self.app.post("/api/v1/create-user")
+        self.assertEqual(422, response.status_code)
