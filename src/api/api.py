@@ -4,8 +4,18 @@ from flask import (
     request,
 )
 import json
+import os
+import sys
+
+SRC_DIR = os.path.dirname(os.path.dirname(__file__))
+ROOT_DIR = os.path.dirname(SRC_DIR)
+sys.path.insert(0, SRC_DIR)
+sys.path.insert(0, ROOT_DIR)
+
+from services.database_service import DatabaseService
 
 app = Flask(__name__)
+
 
 @app.route("/api/v1/health-check", methods=["GET"])
 def health_check():
@@ -31,5 +41,8 @@ def create_user():
 
     if len(username) == 0 or len(password) == 0:
         return make_response("Username and password cannot be blank", 422)
+
+    db = DatabaseService()
+    db.save_user(username=username, password=password)
 
     return make_response("OK", 200)

@@ -14,7 +14,7 @@ class DatabaseService:
     def save_user(self, username, password):
         assert username != "", "Username must not be empty"
         assert password != "", "Password must not be empty"
-        
+
         i = self.users.insert().values(
             username=username,
             password=password,

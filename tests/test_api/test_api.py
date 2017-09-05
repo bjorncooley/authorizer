@@ -57,7 +57,7 @@ class TestAPI(BaseTest):
 
 
     def test_create_user_creates_new_user(self):
-        data = json.dumps({"username": "testuser", "pasvword": "testpass"})
+        data = json.dumps({"username": "testuser", "password": "testpass"})
         self.app.post("/api/v1/create-user", data=data)
 
         query = "SELECT COUNT(*) FROM users"
