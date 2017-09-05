@@ -1,4 +1,5 @@
 import sqlalchemy
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from config.db.database_config import DatabaseConfig
 
@@ -15,8 +16,10 @@ class DatabaseService:
         assert username != "", "Username must not be empty"
         assert password != "", "Password must not be empty"
 
+        hashedPassword = generate_password_hash(password)
+
         i = self.users.insert().values(
             username=username,
-            password=password,
+            password=hashedPassword,
         )
         self.conn.execute(i)
