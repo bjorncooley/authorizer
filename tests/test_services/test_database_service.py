@@ -2,6 +2,7 @@ import psycopg2
 
 from tests.base import BaseTest
 from services.database_service import DatabaseService
+from werkzeug.security import check_password_hash
 
 from config.db.database_config import (
     LOCAL_DBUSER,
@@ -83,4 +84,21 @@ class TestDatabaseService(BaseTest):
         curr.execute(query)
         results = curr.fetchall()
         self.assertNotEqual(password, results[0][0])
+        curr.close()
+
+
+    def test_database_services_saves_correct_password(self):
+        username = 'testuser'
+        password = 'testpass'
+
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        query = "SELECT password FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertTrue(check_password_hash(results[0][0], password))
         curr.close()
