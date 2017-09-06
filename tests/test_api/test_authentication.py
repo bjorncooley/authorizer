@@ -16,6 +16,10 @@ class TestAPI(BaseTest):
 
 
     def test_login_returns_200(self):
+        username = "testuser"
+        password = "testpass"
+        db = DatabaseService()
+        db.save_user(username=username, password=password)
         data = json.dumps({"username": "testuser", "password": "testpass"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 200)
@@ -52,13 +56,12 @@ class TestAPI(BaseTest):
         self.assertEqual(result.status_code, 422)
 
 
-    def test_login_returns_401_with_error_message_if_invalid_credentials(self):
+    def test_login_returns_401_with_invalid_credentials(self):
         db = DatabaseService()
         username = "testuser"
         password = "testpass"
         db.save_user(username=username, password=password)
 
-        data = json.dumps({"username": username, "password": password})
+        data = json.dumps({"username": username, "password": "wrongpassword"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 401)
-        self.assertContains(result.text, "Error")
