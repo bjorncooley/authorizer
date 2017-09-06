@@ -1,4 +1,5 @@
 import sqlalchemy
+from sqlalchemy import select
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config.db.database_config import DatabaseConfig
@@ -25,3 +26,15 @@ class DatabaseService:
             last_name=last_name,
         )
         self.conn.execute(i)
+
+
+    def authenticate_user(self, username, password):
+        assert username != "", "Username must not be empty"
+        assert password != "", "Password must not be empty"
+
+        q = select([self.users.c.password]).where(
+            self.users.c.username == username
+        )
+        result = self.conn.execute(q)
+        row = result.fetchone()
+        return check_password_hash(row[0], password)
