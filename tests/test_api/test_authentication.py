@@ -39,3 +39,13 @@ class TestAPI(BaseTest):
         data = json.dumps({"password": "testpass"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 422)
+
+
+    def test_login_returns_422_if_username_or_password_are_empty(self):
+        data = json.dumps({"username": "testuser", "password": ""})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 422)
+
+        data = json.dumps({"username": "", "password": "testpass"})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 422)
