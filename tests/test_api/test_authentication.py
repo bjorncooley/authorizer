@@ -1,5 +1,6 @@
 import json
 
+from services.database_service import DatabaseService
 from tests.base import BaseTest
 from api import api
 
@@ -49,3 +50,15 @@ class TestAPI(BaseTest):
         data = json.dumps({"username": "", "password": "testpass"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 422)
+
+
+    def test_login_returns_200_with_error_message_if_invalid_credentials(self):
+        db = DatabaseService()
+        username = "testuser"
+        password = "testpass"
+        db.save_user(username=username, password=password)
+
+        data = json.dumps({"username": username, "password": password})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 422)
+        self.assertContains(result.text, "Error")
