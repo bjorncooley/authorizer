@@ -18,18 +18,9 @@ class TestDatabaseService(BaseTest):
         super(TestDatabaseService, self).setUp()
         self.db = DatabaseService()
 
-        self.conn = psycopg2.connect(
-            "dbname={0} user={1} password={2} host={3} port={4}".format(
-            LOCAL_DBNAME, LOCAL_DBUSER, LOCAL_DBPASS, LOCAL_DBHOST, DBPORT
-        ))
-
 
     def tearDown(self):
         super(TestDatabaseService, self).tearDown()
-        query = "DELETE FROM users"
-        curr = self.conn.cursor()
-        curr.execute(query)
-        self.conn.commit()
 
 
     def test_database_service_can_connect(self):

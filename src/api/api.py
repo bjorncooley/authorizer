@@ -42,7 +42,19 @@ def create_user():
     if len(username) == 0 or len(password) == 0:
         return make_response("Username and password cannot be blank", 422)
 
+    first_name = None
+    last_name = None
+    if "first_name" in parsedData:
+        first_name = parsedData["first_name"]
+    if "last_name" in parsedData:
+        last_name = parsedData["last_name"]
+
     db = DatabaseService()
-    db.save_user(username=username, password=password)
+    db.save_user(
+        username=username, 
+        password=password,
+        first_name=first_name,
+        last_name=last_name,
+    )
 
     return make_response("OK", 200)

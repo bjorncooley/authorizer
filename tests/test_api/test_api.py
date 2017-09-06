@@ -87,13 +87,18 @@ class TestAPI(BaseTest):
         first_name = "First"
         last_name = "Last"
 
-        data = json.dumps({"username": username, "password": password})
-        self.app.post("/api/v1/create-user", data=data)
+        data = json.dumps({
+            "username": username, 
+            "password": password,
+            "first_name": first_name,
+            "last_name": last_name,
+        })
+        result = self.app.post("/api/v1/create-user", data=data)
 
         query = "SELECT first_name, last_name FROM users"
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
         self.assertEqual(first_name, results[0][0])
-        self.assertEqual(last_name, results[0][0])
+        self.assertEqual(last_name, results[0][1])
 

@@ -27,4 +27,7 @@ class BaseTest(unittest.TestCase):
         self.conn = self.connect_db(DBNAME, DBUSER, DBPASS, DBHOST, DBPORT)
 
     def tearDown(self):
-        pass
+        curr = self.conn.cursor()
+        query = "DELETE FROM users"
+        curr.execute(query)
+        self.conn.commit()
