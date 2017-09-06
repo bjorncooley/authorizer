@@ -15,3 +15,8 @@ class TestAPI(BaseTest):
     def test_login_returns_200(self):
         result = self.app.post("/api/v1/login")
         self.assertEqual(result.status_code, 200)
+
+
+    def test_login_returns_422_if_no_data(self):
+        result = self.app.post("/api/v1/login")
+        self.assertEqual(result.status_code, 422)
