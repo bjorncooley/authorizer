@@ -80,5 +80,14 @@ def login():
     if error:
         return error
 
+    data = json.loads(request.data)
+    username = data["username"]
+    password = data["password"]
+
+    db = DatabaseService()
+    authenticated = db.authenticate_user(username=username, password=password)
+    if not authenticated:
+        return make_response("Error: invalid credentials", 401)
+
     return make_response("OK", 200)
 
