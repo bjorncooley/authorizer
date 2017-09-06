@@ -35,7 +35,7 @@ class TestAPI(BaseTest):
         result = self.app.post("/api/v1/login", data=data)
         try:
             data = json.loads(result.data)
-            decoded = jwt.decode(encoded, "testsecret", algorithms=["HS256"])
+            decoded = jwt.decode(data, "testsecret", algorithms=["HS256"])
         except:
             decoded = None
         self.assertIsNotNone(decoded)

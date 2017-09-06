@@ -1,9 +1,11 @@
 from flask import (
     Flask,
+    jsonify,
     make_response,
     request,
 )
 import json
+from jose import jwt
 import os
 import sys
 
@@ -89,7 +91,10 @@ def login():
     if not authenticated:
         return make_response("Error: invalid credentials", 401)
 
-    
-
-    return make_response("OK", 200)
+    token = jwt.encode(
+        {"subject": username},
+        "testsecret",
+        algorithm="HS256",
+    )
+    return jsonify(token)
 
