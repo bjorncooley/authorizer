@@ -1,4 +1,5 @@
 import json
+from jose import jwt
 
 from services.database_service import DatabaseService
 from tests.base import BaseTest
@@ -23,6 +24,21 @@ class TestAPI(BaseTest):
         data = json.dumps({"username": "testuser", "password": "testpass"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 200)
+
+
+    def test_login_returns_jwt_token_for_valid_credentials(self):
+        username = "testuser"
+        password = "testpass"
+        db = DatabaseService()
+        db.save_user(username=username, password=password)
+        data = json.dumps({"username": "testuser", "password": "testpass"})
+        result = self.app.post("/api/v1/login", data=data)
+        try:
+            data = json.loads(result.data)
+            decoded = jwt.decode(encoded, "testsecret", algorithms=["HS256"])
+        except:
+            decoded = None
+        self.assertIsNotNone(decoded)
 
 
     def test_login_returns_422_if_no_data(self):
