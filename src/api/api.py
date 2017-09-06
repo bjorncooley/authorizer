@@ -62,5 +62,9 @@ def create_user():
 
 @app.route("/api/v1/login", methods=["POST"])
 def login():
+    data = request.data
+    if not data:
+        return make_response("Request parameters must not be empty", 422)
+
     return make_response("OK", 200)
 

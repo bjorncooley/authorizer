@@ -1,3 +1,5 @@
+import json
+
 from tests.base import BaseTest
 from api import api
 
@@ -13,7 +15,8 @@ class TestAPI(BaseTest):
 
 
     def test_login_returns_200(self):
-        result = self.app.post("/api/v1/login")
+        data = json.dumps({"username": "testuser", "password": "testpass"})
+        result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 200)
 
 
