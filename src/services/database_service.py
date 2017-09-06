@@ -37,4 +37,6 @@ class DatabaseService:
         )
         result = self.conn.execute(q)
         row = result.fetchone()
+        if not row:
+            return False
         return check_password_hash(row[0], password)
