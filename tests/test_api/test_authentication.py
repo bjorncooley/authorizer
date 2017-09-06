@@ -15,7 +15,7 @@ class TestAPI(BaseTest):
         super(TestAPI, self).tearDown()
 
 
-    def test_login_returns_200(self):
+    def test_login_returns_200_with_valid_credentials(self):
         username = "testuser"
         password = "testpass"
         db = DatabaseService()
