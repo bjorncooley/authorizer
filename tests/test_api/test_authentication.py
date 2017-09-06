@@ -29,3 +29,13 @@ class TestAPI(BaseTest):
         data = {"username": "testuser", "password": "testpass"}
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 422)
+
+
+    def test_login_returns_422_if_missing_username_or_password(self):
+        data = json.dumps({"username": "testuser"})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 422)
+
+        data = json.dumps({"password": "testpass"})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 422)
