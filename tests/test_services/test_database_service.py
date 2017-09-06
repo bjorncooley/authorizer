@@ -139,3 +139,10 @@ class TestDatabaseService(BaseTest):
 
         result = self.db.authenticate_user(username=username, password=password)
         self.assertEqual(result, True)
+
+
+    def test_database_service_handles_nonexistent_user(self):
+        username = 'testuser'
+        password = 'testpass'
+        result = self.db.authenticate_user(username=username, password=password)
+        self.assertEqual(result, False)
