@@ -17,14 +17,10 @@ from services.database_service import DatabaseService
 app = Flask(__name__)
 
 
-@app.route("/api/v1/health-check", methods=["GET"])
-def health_check():
-    return make_response("OK", 200)
-
-
-@app.route("/api/v1/create-user", methods=["POST"])
-def create_user():
+def check_params(request, required_fields):
     data = request.data
+    missing_fields = []
+
     if not data:
         return make_response("Request parameters must not be empty", 422)
 
@@ -33,21 +29,39 @@ def create_user():
     except TypeError:
         return make_response("Data must be convertible to JSON", 422)
 
-    try:
-        username = parsedData["username"]
-        password = parsedData["password"]
-    except KeyError:
-        return make_response("Username and password are required parameters", 422)
+    for field in required_fields:
+        if field not in parsedData:
+            missing_fields.append(field)
+        elif len(parsedData[field]) == 0:
+            missing_fields.append(field)
 
-    if len(username) == 0 or len(password) == 0:
-        return make_response("Username and password cannot be blank", 422)
+    if missing_fields:
+        return make_response("The following fields are required: %r" % missing_fields, 422)
 
+    return None
+
+
+@app.route("/api/v1/health-check", methods=["GET"])
+def health_check():
+    return make_response("OK", 200)
+
+
+@app.route("/api/v1/create-user", methods=["POST"])
+def create_user():
+    
+    error = check_params(request, ["username", "password"])
+    if error:
+        return error
+
+    data = json.loads(request.data)
+    username = data["username"]
+    password = data["password"]
     first_name = None
     last_name = None
-    if "first_name" in parsedData:
-        first_name = parsedData["first_name"]
-    if "last_name" in parsedData:
-        last_name = parsedData["last_name"]
+    if "first_name" in data:
+        first_name = data["first_name"]
+    if "last_name" in data:
+        last_name = data["last_name"]
 
     db = DatabaseService()
     db.save_user(
@@ -62,9 +76,9 @@ def create_user():
 
 @app.route("/api/v1/login", methods=["POST"])
 def login():
-    data = request.data
-    if not data:
-        return make_response("Request parameters must not be empty", 422)
+    error = check_params(request, ["username", "password"])
+    if error:
+        return error
 
     return make_response("OK", 200)
 
