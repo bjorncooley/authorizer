@@ -127,3 +127,15 @@ class TestDatabaseService(BaseTest):
         self.assertEqual(None, results[0][0])
         self.assertEqual(None, results[0][1])
         curr.close()
+
+
+    def test_database_service_can_authorize_valid_user_credentials(self):
+        username = 'testuser'
+        password = 'testpass'
+        self.db.save_user(
+            username=username,
+            password=password,
+        )
+
+        result = self.db.authenticate_user(username=username, password=password)
+        self.assertEqual(result, True)
