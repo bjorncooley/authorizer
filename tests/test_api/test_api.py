@@ -56,7 +56,7 @@ class TestAPI(BaseTest):
         self.assertEqual(422, response.status_code)
 
 
-    def test_create_user_creates_new_user(self):
+    def test_create_user_saves_new_user_to_db(self):
         data = json.dumps({"username": "testuser", "password": "testpass"})
         self.app.post("/api/v1/create-user", data=data)
 
