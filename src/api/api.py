@@ -58,3 +58,9 @@ def create_user():
     )
 
     return make_response("OK", 200)
+
+
+@app.route("/api/v1/login", methods=["POST"])
+def login():
+    return make_response("OK", 200)
+
