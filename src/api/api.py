@@ -30,7 +30,7 @@ def check_params(request, required_fields):
     if not data:
         return make_response("Request parameters must not be empty", 422)
 
-    json.loads(data)
+    json.loads(data.decode('utf-8'))
     try:
         parsedData = json.loads(data)
     except TypeError:
