@@ -53,12 +53,12 @@ def health_check():
 @app.route("/api/v1/create-user", methods=["POST"])
 def create_user():
     
-    error = check_params(request, ["username", "password"])
+    error = check_params(request, ["email", "password"])
     if error:
         return error
 
     data = json.loads(request.data)
-    username = data["username"]
+    email = data["email"]
     password = data["password"]
     first_name = None
     last_name = None
@@ -73,7 +73,7 @@ def create_user():
 
     db = DatabaseService()
     db.save_user(
-        username=username, 
+        email=email, 
         password=password,
         first_name=first_name,
         last_name=last_name,
@@ -85,21 +85,21 @@ def create_user():
 
 @app.route("/api/v1/login", methods=["POST"])
 def login():
-    error = check_params(request, ["username", "password"])
+    error = check_params(request, ["email", "password"])
     if error:
         return error
 
     data = json.loads(request.data)
-    username = data["username"]
+    email = data["email"]
     password = data["password"]
 
     db = DatabaseService()
-    authenticated = db.authenticate_user(username=username, password=password)
+    authenticated = db.authenticate_user(email=email, password=password)
     if not authenticated:
         return make_response("Error: invalid credentials", 401)
 
     token = jwt.encode(
-        {"subject": username},
+        {"subject": email},
         app.config["SECRET_KEY"],
         algorithm="HS256",
     )

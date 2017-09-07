@@ -13,8 +13,8 @@ class DatabaseService:
         self.users = db_config.users
 
 
-    def save_user(self, username, password, user_type=None, first_name=None, last_name=None):
-        assert username != "", "Username must not be empty"
+    def save_user(self, email, password, user_type=None, first_name=None, last_name=None):
+        assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
         # set default user_type to student
@@ -24,7 +24,7 @@ class DatabaseService:
         hashedPassword = generate_password_hash(password)
 
         i = self.users.insert().values(
-            username=username,
+            email=email,
             password=hashedPassword,
             first_name=first_name,
             last_name=last_name,
@@ -33,12 +33,12 @@ class DatabaseService:
         self.conn.execute(i)
 
 
-    def authenticate_user(self, username, password):
-        assert username != "", "Username must not be empty"
+    def authenticate_user(self, email, password):
+        assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
         q = select([self.users.c.password]).where(
-            self.users.c.username == username
+            self.users.c.email == email
         )
         result = self.conn.execute(q)
         row = result.fetchone()
