@@ -17,7 +17,7 @@ sys.path.insert(0, BASE_DIR)
 from services.database_service import DatabaseService
 
 app = Flask(__name__)
-app.config.from_object("config.server.server_config.ServerConfig")
+app.config.from_object("config.api.api_config.APIConfig")
 
 
 # Pull into separate lib

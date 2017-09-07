@@ -1,4 +1,4 @@
 import os
 
-class ServerConfig:
+class APIConfig:
     SECRET_KEY = os.getenv("SECRET_KEY", "notarealsecretkey")
