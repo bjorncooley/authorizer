@@ -164,4 +164,3 @@ class TestDatabaseService(BaseTest):
         results = curr.fetchall()
         self.assertEqual(user_type, results[0][0])
         curr.close()
-        

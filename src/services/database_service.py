@@ -13,7 +13,7 @@ class DatabaseService:
         self.users = db_config.users
 
 
-    def save_user(self, username, password, first_name=None, last_name=None):
+    def save_user(self, username, password, first_name=None, last_name=None, user_type="student"):
         assert username != "", "Username must not be empty"
         assert password != "", "Password must not be empty"
 
@@ -24,6 +24,7 @@ class DatabaseService:
             password=hashedPassword,
             first_name=first_name,
             last_name=last_name,
+            user_type=user_type,
         )
         self.conn.execute(i)
 
