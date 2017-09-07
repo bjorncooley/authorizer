@@ -30,10 +30,9 @@ def check_params(request, required_fields):
     if not data:
         return make_response("Request parameters must not be empty", 422)
 
+    json.loads(data)
     try:
         parsedData = json.loads(data)
-        print("data is %r" % data)
-        logger.info("data is %r" % data)
     except TypeError:
         logger.info("Error converting data to JSON: %r" % data)
         return make_response("Data must be convertible to JSON", 422)
