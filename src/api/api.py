@@ -61,7 +61,7 @@ def create_user():
     if error:
         return error
 
-    data = json.loads(request.data)
+    data = json.loads(request.data.decode('utf-8'))
     email = data["email"]
     password = data["password"]
     first_name = None
@@ -93,7 +93,7 @@ def login():
     if error:
         return error
 
-    data = json.loads(request.data)
+    data = json.loads(request.data.decode('utf-8'))
     email = data["email"]
     password = data["password"]
 
