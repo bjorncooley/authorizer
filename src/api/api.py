@@ -62,7 +62,7 @@ def create_user():
     password = data["password"]
     first_name = None
     last_name = None
-    user_type = "student"
+    user_type = None
 
     if "first_name" in data:
         first_name = data["first_name"]
