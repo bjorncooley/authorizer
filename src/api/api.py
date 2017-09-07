@@ -17,8 +17,10 @@ sys.path.insert(0, ROOT_DIR)
 from services.database_service import DatabaseService
 
 app = Flask(__name__)
+app.config.from_object("config.server.server_config.ServerConfig")
 
 
+# Pull into separate lib
 def check_params(request, required_fields):
     data = request.data
     missing_fields = []
@@ -93,7 +95,7 @@ def login():
 
     token = jwt.encode(
         {"subject": username},
-        "testsecret",
+        app.config["SECRET_KEY"],
         algorithm="HS256",
     )
     return jsonify(token)

@@ -1,6 +1,7 @@
 import json
 from jose import jwt
 
+from config.server.server_config import ServerConfig
 from services.database_service import DatabaseService
 from tests.base import BaseTest
 from api import api
@@ -30,12 +31,14 @@ class TestAPI(BaseTest):
         username = "testuser"
         password = "testpass"
         db = DatabaseService()
+        s = ServerConfig()
         db.save_user(username=username, password=password)
         data = json.dumps({"username": "testuser", "password": "testpass"})
+        
         result = self.app.post("/api/v1/login", data=data)
         try:
             data = json.loads(result.data)
-            decoded = jwt.decode(data, "testsecret", algorithms=["HS256"])
+            decoded = jwt.decode(data, s.SECRET_KEY, algorithms=["HS256"])
         except:
             decoded = None
         self.assertIsNotNone(decoded)
