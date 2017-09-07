@@ -102,3 +102,17 @@ class TestAPI(BaseTest):
         self.assertEqual(first_name, results[0][0])
         self.assertEqual(last_name, results[0][1])
 
+
+    def test_create_user_creates_user_as_student_by_default(self):
+        username = "testuser"
+        password = "testpass"
+
+        data = json.dumps({"username": username, "password": password})
+        self.app.post("/api/v1/create-user", data=data)
+
+        query = "SELECT user_type FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual("student", results[0][0])
+
