@@ -6,6 +6,7 @@ from flask import (
 )
 import json
 from jose import jwt
+import logging
 import os
 import sys
 
@@ -18,6 +19,7 @@ from services.database_service import DatabaseService
 
 app = Flask(__name__)
 app.config.from_object("config.api.api_config.APIConfig")
+logger = logging.getLogger()
 
 
 # Pull into separate lib
@@ -30,7 +32,10 @@ def check_params(request, required_fields):
 
     try:
         parsedData = json.loads(data)
+        print("data is %r" % data)
+        logger.info("data is %r" % data)
     except TypeError:
+        logger.info("Error converting data to JSON: %r" % data)
         return make_response("Data must be convertible to JSON", 422)
 
     for field in required_fields:
