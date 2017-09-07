@@ -62,10 +62,14 @@ def create_user():
     password = data["password"]
     first_name = None
     last_name = None
+    user_type = "student"
+
     if "first_name" in data:
         first_name = data["first_name"]
     if "last_name" in data:
         last_name = data["last_name"]
+    if "user_type" in data:
+        user_type = data["user_type"]
 
     db = DatabaseService()
     db.save_user(
@@ -73,6 +77,7 @@ def create_user():
         password=password,
         first_name=first_name,
         last_name=last_name,
+        user_type=user_type,
     )
 
     return make_response("OK", 200)
