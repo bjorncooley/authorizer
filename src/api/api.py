@@ -10,9 +10,9 @@ import os
 import sys
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
-ROOT_DIR = os.path.dirname(SRC_DIR)
+BASE_DIR = os.path.dirname(SRC_DIR)
 sys.path.insert(0, SRC_DIR)
-sys.path.insert(0, ROOT_DIR)
+sys.path.insert(0, BASE_DIR)
 
 from services.database_service import DatabaseService
 
