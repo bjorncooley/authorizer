@@ -146,3 +146,22 @@ class TestDatabaseService(BaseTest):
         password = 'testpass'
         result = self.db.authenticate_user(username=username, password=password)
         self.assertEqual(result, False)
+
+
+    def test_database_service_creates_user_with_correct_user_type(self):
+        username = 'testuser'
+        password = 'testpass'
+        user_type = 'testtype'
+        self.db.save_user(
+            username=username,
+            password=password,
+            user_type=user_type,
+        )
+
+        query = "SELECT user_type FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(user_type, results[0][0])
+        curr.close()
+        
