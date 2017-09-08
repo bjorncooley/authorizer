@@ -141,6 +141,20 @@ class TestDatabaseService(BaseTest):
         self.assertIsNotNone(result)
 
 
+    def test_database_service_returns_user_type_after_authorizing(self):
+        email = 'test@example.com'
+        password = 'testpass'
+        user_type = 'testtype'
+        self.db.save_user(
+            email=email,
+            password=password,
+            user_type=user_type,
+        )
+
+        result = self.db.authenticate_user(email=email, password=password)
+        self.assertEqual(user_type, result)
+
+
     def test_database_service_handles_nonexistent_user(self):
         email = 'test@example.com'
         password = 'testpass'
