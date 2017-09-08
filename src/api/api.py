@@ -4,6 +4,7 @@ from flask import (
     make_response,
     request,
 )
+from flask_cors import CORS
 import json
 from jose import jwt
 import logging
@@ -19,6 +20,7 @@ from services.database_service import DatabaseService
 
 app = Flask(__name__)
 app.config.from_object("config.api.api_config.APIConfig")
+CORS(app)
 logger = logging.getLogger()
 
 
