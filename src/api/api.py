@@ -96,12 +96,12 @@ def login():
     password = data["password"]
 
     db = DatabaseService()
-    authenticated = db.authenticate_user(email=email, password=password)
-    if not authenticated:
+    user_type = db.authenticate_user(email=email, password=password)
+    if not user_type:
         return make_response("Error: invalid credentials", 401)
 
     token = jwt.encode(
-        {"subject": email},
+        {"subject": email, "user_type": user_type},
         app.config["SECRET_KEY"],
         algorithm="HS256",
     )
