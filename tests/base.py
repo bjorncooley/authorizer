@@ -31,3 +31,4 @@ class BaseTest(unittest.TestCase):
         query = "DELETE FROM users"
         curr.execute(query)
         self.conn.commit()
+        self.conn.close()

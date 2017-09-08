@@ -37,11 +37,16 @@ class DatabaseService:
         assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
-        q = select([self.users.c.password]).where(
+        q = select([self.users.c.password, self.users.c.user_type]).where(
             self.users.c.email == email
         )
         result = self.conn.execute(q)
         row = result.fetchone()
         if not row:
             return False
-        return check_password_hash(row[0], password)
+
+        # If the password is correct, return the user_type
+        if check_password_hash(row[0], password):
+            return row[1]
+        else:
+            return None
