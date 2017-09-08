@@ -64,4 +64,3 @@ class TestProfile(BaseTest):
         self.assertEqual(data["user_type"], user_type)
         self.assertEqual(data["first_name"], first_name)
         self.assertEqual(data["last_name"], last_name)
-
