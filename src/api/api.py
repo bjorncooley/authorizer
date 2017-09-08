@@ -89,6 +89,20 @@ def create_user():
 
 @app.route("/api/v1/profile/get", methods=["POST"])
 def get_profile():
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return make_response("Valid token required", 401)
+
+    try:
+        encoded = auth_header.split(" ")[1]
+        decoded = jwt.decode(
+            encoded, 
+            app.config["SECRET_KEY"],
+            algorithms=["HS256"]
+        )
+        email = decoded["subject"]
+    except:
+        return make_response("Invalid token", 401)
 
     return make_response("OK", 200)
 

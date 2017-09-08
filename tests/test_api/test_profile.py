@@ -1,4 +1,7 @@
+from jose import jwt
+
 from api import api
+from config.api.api_config import APIConfig
 from tests.base import BaseTest
 
 
@@ -13,8 +16,22 @@ class TestProfile(BaseTest):
         super(TestProfile, self).tearDown()
 
 
+    def post_request_with_token(self, endpoint):
+
+        token = jwt.encode(
+            {"subject": "test@example.com"},
+            APIConfig().SECRET_KEY,
+            algorithm="HS256",
+        )
+        result = self.app.post(
+            endpoint,
+            headers={"Authorization": "Bearer %s" % token},
+        )
+        return result
+
+
     def test_get_profile_returns_200(self):
-        result = self.app.post("/api/v1/profile/get")
+        result = self.post_request_with_token("/api/v1/profile/get")
         self.assertEqual(200, result.status_code)
 
 
