@@ -38,7 +38,8 @@ class TestAPI(BaseTest):
         result = self.app.post("/api/v1/login", data=data)
         try:
             data = json.loads(result.data)
-            decoded = jwt.decode(data, api_config.SECRET_KEY, algorithms=["HS256"])
+            token = data["token"]
+            decoded = jwt.decode(token, api_config.SECRET_KEY, algorithms=["HS256"])
         except:
             decoded = None
         self.assertIsNotNone(decoded)
@@ -55,7 +56,8 @@ class TestAPI(BaseTest):
         result = self.app.post("/api/v1/login", data=data)
         try:
             data = json.loads(result.data)
-            decoded = jwt.decode(data, api_config.SECRET_KEY, algorithms=["HS256"])
+            token = data["token"]
+            decoded = jwt.decode(token, api_config.SECRET_KEY, algorithms=["HS256"])
             subject = decoded["subject"]
             user_type = decoded["user_type"]
         except:
