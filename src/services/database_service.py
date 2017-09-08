@@ -13,6 +13,39 @@ class DatabaseService:
         self.users = db_config.users
 
 
+    def authenticate_user(self, email, password):
+        assert email != "", "email must not be empty"
+        assert password != "", "Password must not be empty"
+
+        q = select([self.users.c.password, self.users.c.user_type]).where(
+            self.users.c.email == email
+        )
+        result = self.conn.execute(q)
+        row = result.fetchone()
+        if not row:
+            return None
+
+        # If the password is correct, return the user_type
+        if check_password_hash(row[0], password):
+            return row[1]
+        else:
+            return None
+
+
+    def get_user(self, email):
+        assert email != "", "email must not be empty"
+
+        q = select([
+            self.users.c.first_name,
+            self.users.c.last_name,
+            self.users.c.user_type]
+        ).where(self.users.c.email == email)
+
+        result = self.conn.execute(q)
+        row = result.fetchone()
+        return row
+
+
     def save_user(self, email, password, user_type=None, first_name=None, last_name=None):
         assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
@@ -31,22 +64,3 @@ class DatabaseService:
             user_type=user_type,
         )
         self.conn.execute(i)
-
-
-    def authenticate_user(self, email, password):
-        assert email != "", "email must not be empty"
-        assert password != "", "Password must not be empty"
-
-        q = select([self.users.c.password, self.users.c.user_type]).where(
-            self.users.c.email == email
-        )
-        result = self.conn.execute(q)
-        row = result.fetchone()
-        if not row:
-            return None
-
-        # If the password is correct, return the user_type
-        if check_password_hash(row[0], password):
-            return row[1]
-        else:
-            return None
