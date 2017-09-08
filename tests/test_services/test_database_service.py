@@ -178,3 +178,17 @@ class TestDatabaseService(BaseTest):
         results = curr.fetchall()
         self.assertEqual(user_type, results[0][0])
         curr.close()
+
+
+    def test_database_service_can_return_user_data(self):
+        email = 'test@example.com'
+        password = 'testpass'
+        user_type = 'testtype'
+        self.db.save_user(
+            email=email,
+            password=password,
+            user_type=user_type,
+        )
+
+        user = self.db.get_user(email=email)
+        self.assertIsNotNone(user)
