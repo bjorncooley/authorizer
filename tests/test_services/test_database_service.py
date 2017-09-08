@@ -159,7 +159,7 @@ class TestDatabaseService(BaseTest):
         email = 'test@example.com'
         password = 'testpass'
         result = self.db.authenticate_user(email=email, password=password)
-        self.assertEqual(result, False)
+        self.assertEqual(result, None)
 
 
     def test_database_service_creates_user_with_correct_user_type(self):
