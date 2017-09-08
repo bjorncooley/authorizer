@@ -192,3 +192,25 @@ class TestDatabaseService(BaseTest):
 
         user = self.db.get_user(email=email)
         self.assertIsNotNone(user)
+
+
+    def test_database_service_returns_correct_user_data(self):
+        email = 'test@example.com'
+        password = 'testpass'
+        user_type = 'testtype'
+        first_name = 'First'
+        last_name = 'Last'
+        self.db.save_user(
+            email=email,
+            password=password,
+            user_type=user_type,
+            first_name=first_name,
+            last_name=last_name,
+        )
+
+        user = self.db.get_user(email=email)
+        self.assertEqual(user['email'], email)
+        self.assertEqual(user['first_name'], first_name)
+        self.assertEqual(user['last_name'], last_name)
+        self.assertEqual(user['user_type'], user_type)
+
