@@ -8,6 +8,7 @@ from flask_cors import CORS
 import json
 from jose import jwt
 import logging
+from pprint import pprint
 import os
 import sys
 
@@ -87,8 +88,9 @@ def create_user():
     return make_response("OK", 200)
 
 
-@app.route("/api/v1/profile/get", methods=["POST"])
+@app.route("/api/v1/profile/get", methods=["GET"])
 def get_profile():
+
     auth_header = request.headers.get("Authorization")
     if auth_header is None:
         return make_response("Valid token required", 401)

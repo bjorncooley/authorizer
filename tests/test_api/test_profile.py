@@ -18,14 +18,14 @@ class TestProfile(BaseTest):
         super(TestProfile, self).tearDown()
 
 
-    def post_request_with_token(self, endpoint):
+    def get_request_with_token(self, endpoint):
 
         token = jwt.encode(
             {"subject": "test@example.com"},
             APIConfig().SECRET_KEY,
             algorithm="HS256",
         )
-        result = self.app.post(
+        result = self.app.get(
             endpoint,
             headers={"Authorization": "Bearer %s" % token},
         )
@@ -33,12 +33,12 @@ class TestProfile(BaseTest):
 
 
     def test_get_profile_returns_200(self):
-        result = self.post_request_with_token("/api/v1/profile/get")
+        result = self.get_request_with_token("/api/v1/profile/get")
         self.assertEqual(200, result.status_code)
 
 
     def test_get_profile_returns_401_if_no_token(self):
-        result = self.app.post("/api/v1/profile/get")
+        result = self.app.get("/api/v1/profile/get")
         self.assertEqual(401, result.status_code)
 
 
@@ -58,7 +58,7 @@ class TestProfile(BaseTest):
             last_name=last_name,
         )
 
-        result = self.post_request_with_token("/api/v1/profile/get")
+        result = self.get_request_with_token("/api/v1/profile/get")
         data = json.loads(result.data)
         self.assertEqual(data["email"], email)
         self.assertEqual(data["user_type"], user_type)
