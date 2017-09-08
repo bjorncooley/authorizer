@@ -87,6 +87,12 @@ def create_user():
     return make_response("OK", 200)
 
 
+@app.route("/api/v1/profile/get", methods=["POST"])
+def get_profile():
+
+    return make_response("OK", 200)
+
+
 @app.route("/api/v1/login", methods=["POST"])
 def login():
     error = check_params(request, ["email", "password"])
