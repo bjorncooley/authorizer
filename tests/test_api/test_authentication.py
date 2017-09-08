@@ -44,6 +44,25 @@ class TestAPI(BaseTest):
         self.assertIsNotNone(decoded)
 
 
+    def test_jwt_token_contains_subject_and_user_type(self):
+        email = "test@example.com"
+        password = "testpass"
+        db = DatabaseService()
+        api_config = APIConfig()
+        db.save_user(email=email, password=password)
+        data = json.dumps({"email": "test@example.com", "password": "testpass"})
+
+        result = self.app.post("/api/v1/login", data=data)
+        try:
+            data = json.loads(result.data)
+            decoded = jwt.decode(data, api_config.SECRET_KEY, algorithms=["HS256"])
+            subject = decoded["subject"]
+            user_type = decoded["user_type"]
+        except:
+            decoded = None
+        self.assertIsNotNone(decoded)
+
+
     def test_login_returns_422_if_no_data(self):
         result = self.app.post("/api/v1/login")
         self.assertEqual(result.status_code, 422)
