@@ -53,12 +53,12 @@ class TestProfile(BaseTest):
         db.save_user(
             email=email,
             password=password,
+            user_type=user_type,
             first_name=first_name,
             last_name=last_name,
-            user_type=user_type,
         )
 
-        result = self.post_request_with_token("/api/vi/profile/get")
+        result = self.post_request_with_token("/api/v1/profile/get")
         data = json.loads(result.data)
         self.assertEqual(data["email"], email)
         self.assertEqual(data["user_type"], user_type)

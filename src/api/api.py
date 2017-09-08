@@ -104,7 +104,9 @@ def get_profile():
     except:
         return make_response("Invalid token", 401)
 
-    return make_response("OK", 200)
+    db = DatabaseService()
+    user = db.get_user(email)
+    return jsonify(user)
 
 
 @app.route("/api/v1/login", methods=["POST"])
