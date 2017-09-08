@@ -50,6 +50,7 @@ class DatabaseService:
             user['user_type'] = row[2]
             user['email'] = email
         return user
+        
 
     def save_user(self, email, password, user_type=None, first_name=None, last_name=None):
         assert email != "", "email must not be empty"

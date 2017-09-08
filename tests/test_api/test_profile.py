@@ -1,8 +1,10 @@
 from jose import jwt
+import json
 
 from api import api
 from config.api.api_config import APIConfig
 from tests.base import BaseTest
+from services.database_service import DatabaseService
 
 
 class TestProfile(BaseTest):
@@ -38,3 +40,28 @@ class TestProfile(BaseTest):
     def test_get_profile_returns_401_if_no_token(self):
         result = self.app.post("/api/v1/profile/get")
         self.assertEqual(401, result.status_code)
+
+
+    def test_get_profile_returns_user_data(self):
+        db = DatabaseService()
+        email = "test@example.com"
+        password = "testpass"
+        first_name = "First"
+        last_name = "Last"
+        user_type = "testtype"
+
+        db.save_user(
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            user_type=user_type,
+        )
+
+        result = self.post_request_with_token("/api/vi/profile/get")
+        data = json.loads(result.data)
+        self.assertEqual(data["email"], email)
+        self.assertEqual(data["user_type"], user_type)
+        self.assertEqual(data["first_name"], first_name)
+        self.assertEqual(data["last_name"], last_name)
+
