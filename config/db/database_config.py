@@ -1,8 +1,10 @@
+import datetime
 import os
 import sqlalchemy
 from sqlalchemy import (
     Column,
     create_engine,
+    DateTime,
     Integer,
     MetaData,
     String,
@@ -44,6 +46,13 @@ class DatabaseConfig:
             Column('salt', String),
             Column('username', String),
             Column('user_type', String),
+        )
+
+        self.reset_tokens = Table('reset_tokens', self.metadata,
+            Column('email', String),
+            Column('id', Integer, primary_key=True),
+            Column('time_created', DateTime(timezone=True), onupdate=datetime.datetime.now),
+            Column('token', String),
         )
 
     def create_tables(self):
