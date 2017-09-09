@@ -11,7 +11,6 @@ class TestResetPassword(BaseTest):
         self.app = api.app.test_client()
 
 
-
     def tearDown(self):
         super(TestResetPassword, self).tearDown()
 

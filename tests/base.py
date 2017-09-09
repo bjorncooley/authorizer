@@ -30,5 +30,7 @@ class BaseTest(unittest.TestCase):
         curr = self.conn.cursor()
         query = "DELETE FROM users"
         curr.execute(query)
+        query = "DELETE FROM reset_tokens"
+        curr.execute(query)
         self.conn.commit()
         self.conn.close()
