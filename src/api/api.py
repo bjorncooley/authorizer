@@ -10,6 +10,8 @@ from jose import jwt
 import logging
 from pprint import pprint
 import os
+import random
+import string
 import sys
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -139,5 +141,11 @@ def reset_password():
     error = check_params(request, ["email"])
     if error:
         return error
+
+    data = json.loads(request.data.decode('utf-8'))
+    email = data["email"]
+    token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
+    db = DatabaseService()
+    db.save_token(email=email, token=token)
     return make_response("OK", 200)
 
