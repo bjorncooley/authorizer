@@ -133,3 +133,8 @@ def login():
     )
     return jsonify({"token": token})
 
+
+@app.route("/api/v1/reset-password", methods=["POST"])
+def reset_password():
+    return make_response("OK", 200)
+
