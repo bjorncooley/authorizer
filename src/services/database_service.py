@@ -10,6 +10,7 @@ class DatabaseService:
     def __init__(self):
         db_config = DatabaseConfig()
         self.conn = db_config.engine.connect()
+        self.reset_tokens = db_config.reset_tokens
         self.users = db_config.users
 
 
@@ -54,6 +55,17 @@ class DatabaseService:
             user['email'] = email
         print("RESULT IS %r" % row)
         return user
+
+
+    def save_token(self, email, token):
+        assert email != "", "email must not be empty"
+        assert token != "", "token must not be empty"
+
+        i = self.reset_tokens.insert().values(
+            email=email,
+            token=token,
+        )
+        result = self.conn.execute(i)
 
 
     def save_user(self, email, password, user_type=None, first_name=None, last_name=None):
