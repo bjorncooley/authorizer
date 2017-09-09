@@ -44,7 +44,7 @@ class DatabaseConfig:
             Column('password', String),
             Column('salesforce_id', String),
             Column('salt', String),
-            Column('username', String),
+            Column('email', String),
             Column('user_type', String),
         )
 

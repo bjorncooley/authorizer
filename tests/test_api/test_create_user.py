@@ -20,7 +20,7 @@ class TestAPI(BaseTest):
 
 
     def test_create_user_returns_200(self):
-        data = json.dumps({"username": "testuser", "password": "testpass"})
+        data = json.dumps({"email": "test@example.com", "password": "testpass"})
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(200, response.status_code)
 
@@ -31,13 +31,13 @@ class TestAPI(BaseTest):
 
 
     def test_create_user_returns_422_for_incorrectly_formatted_data(self):
-        data = {"username": "testuser", "password": "testpass"}
+        data = {"email": "test@example.com", "password": "testpass"}
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(422, response.status_code)
 
 
-    def test_create_user_returns_422_if_missing_username_or_password(self):
-        data = json.dumps({"username": "testuser"})
+    def test_create_user_returns_422_if_missing_email_or_password(self):
+        data = json.dumps({"email": "test@example.com"})
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(422, response.status_code)
 
@@ -46,18 +46,18 @@ class TestAPI(BaseTest):
         self.assertEqual(422, response.status_code)
 
 
-    def test_create_user_returns_422_if_username_or_password_are_empty(self):
-        data = json.dumps({"username": "testuser", "password": ""})
+    def test_create_user_returns_422_if_email_or_password_are_empty(self):
+        data = json.dumps({"email": "test@example.com", "password": ""})
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(422, response.status_code)
 
-        data = json.dumps({"username": "", "password": "testpass"})
+        data = json.dumps({"email": "", "password": "testpass"})
         response = self.app.post("/api/v1/create-user", data=data)
         self.assertEqual(422, response.status_code)
 
 
     def test_create_user_saves_new_user_to_db(self):
-        data = json.dumps({"username": "testuser", "password": "testpass"})
+        data = json.dumps({"email": "test@example.com", "password": "testpass"})
         self.app.post("/api/v1/create-user", data=data)
 
         query = "SELECT COUNT(*) FROM users"
@@ -67,28 +67,28 @@ class TestAPI(BaseTest):
         self.assertEqual(1, results[0][0])
 
 
-    def test_create_user_creates_user_with_correct_username(self):
-        username = "testuser"
+    def test_create_user_creates_user_with_correct_email(self):
+        email = "test@example.com"
         password = "testpass"
 
-        data = json.dumps({"username": username, "password": password})
+        data = json.dumps({"email": email, "password": password})
         self.app.post("/api/v1/create-user", data=data)
 
-        query = "SELECT username, password FROM users"
+        query = "SELECT email, password FROM users"
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertEqual(username, results[0][0])
+        self.assertEqual(email, results[0][0])
 
 
     def test_create_user_creates_user_with_correct_first_and_last_name(self):
-        username = "testuser"
+        email = "test@example.com"
         password = "testpass"
         first_name = "First"
         last_name = "Last"
 
         data = json.dumps({
-            "username": username, 
+            "email": email, 
             "password": password,
             "first_name": first_name,
             "last_name": last_name,
@@ -101,4 +101,18 @@ class TestAPI(BaseTest):
         results = curr.fetchall()
         self.assertEqual(first_name, results[0][0])
         self.assertEqual(last_name, results[0][1])
+
+
+    def test_create_user_creates_user_as_student_by_default(self):
+        email = "test@example.com"
+        password = "testpass"
+
+        data = json.dumps({"email": email, "password": password})
+        self.app.post("/api/v1/create-user", data=data)
+
+        query = "SELECT user_type FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual("student", results[0][0])
 

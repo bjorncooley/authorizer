@@ -1,22 +1,31 @@
 from flask import (
     Flask,
+    jsonify,
     make_response,
     request,
 )
+from flask_cors import CORS
 import json
+from jose import jwt
+import logging
+from pprint import pprint
 import os
 import sys
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
-ROOT_DIR = os.path.dirname(SRC_DIR)
+BASE_DIR = os.path.dirname(SRC_DIR)
 sys.path.insert(0, SRC_DIR)
-sys.path.insert(0, ROOT_DIR)
+sys.path.insert(0, BASE_DIR)
 
 from services.database_service import DatabaseService
 
 app = Flask(__name__)
+app.config.from_object("config.api.api_config.APIConfig")
+CORS(app)
+logger = logging.getLogger()
 
 
+# Pull into separate lib
 def check_params(request, required_fields):
     data = request.data
     missing_fields = []
@@ -25,7 +34,7 @@ def check_params(request, required_fields):
         return make_response("Request parameters must not be empty", 422)
 
     try:
-        parsedData = json.loads(data)
+        parsedData = json.loads(data.decode('utf-8'))
     except TypeError:
         return make_response("Data must be convertible to JSON", 422)
 
@@ -49,45 +58,78 @@ def health_check():
 @app.route("/api/v1/create-user", methods=["POST"])
 def create_user():
     
-    error = check_params(request, ["username", "password"])
+    error = check_params(request, ["email", "password"])
     if error:
         return error
 
-    data = json.loads(request.data)
-    username = data["username"]
+    data = json.loads(request.data.decode('utf-8'))
+    email = data["email"]
     password = data["password"]
     first_name = None
     last_name = None
+    user_type = None
+
     if "first_name" in data:
         first_name = data["first_name"]
     if "last_name" in data:
         last_name = data["last_name"]
+    if "user_type" in data:
+        user_type = data["user_type"]
 
     db = DatabaseService()
     db.save_user(
-        username=username, 
+        email=email, 
         password=password,
         first_name=first_name,
         last_name=last_name,
+        user_type=user_type,
     )
 
     return make_response("OK", 200)
 
 
+@app.route("/api/v1/profile/get", methods=["GET"])
+def get_profile():
+
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return make_response("Valid token required", 401)
+
+    try:
+        encoded = auth_header.split(" ")[1]
+        decoded = jwt.decode(
+            encoded, 
+            app.config["SECRET_KEY"],
+            algorithms=["HS256"]
+        )
+        email = decoded["subject"]
+    except:
+        return make_response("Invalid token", 401)
+
+    db = DatabaseService()
+    user = db.get_user(email)
+    return jsonify(user)
+
+
 @app.route("/api/v1/login", methods=["POST"])
 def login():
-    error = check_params(request, ["username", "password"])
+    error = check_params(request, ["email", "password"])
     if error:
         return error
 
-    data = json.loads(request.data)
-    username = data["username"]
+    data = json.loads(request.data.decode('utf-8'))
+    email = data["email"]
     password = data["password"]
 
     db = DatabaseService()
-    authenticated = db.authenticate_user(username=username, password=password)
-    if not authenticated:
+    user_type = db.authenticate_user(email=email, password=password)
+    if not user_type:
         return make_response("Error: invalid credentials", 401)
 
-    return make_response("OK", 200)
+    token = jwt.encode(
+        {"subject": email, "user_type": user_type},
+        app.config["SECRET_KEY"],
+        algorithm="HS256",
+    )
+    return jsonify({"token": token})
 
