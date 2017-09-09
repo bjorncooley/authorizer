@@ -214,3 +214,17 @@ class TestDatabaseService(BaseTest):
         self.assertEqual(user['last_name'], last_name)
         self.assertEqual(user['user_type'], user_type)
 
+
+    def test_database_service_can_save_reset_token(self):
+        self.db.save_token(
+            email='test@example.com',
+            token='thisisatesttoken',
+        )
+
+        query = "SELECT * FROM reset_tokens"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        curr.close()
+        self.assertIsNotNone(results[0])
+
