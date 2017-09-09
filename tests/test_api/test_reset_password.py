@@ -1,5 +1,6 @@
 
 from api import api
+import json
 from tests.base import BaseTest
 
 
@@ -16,10 +17,11 @@ class TestResetPassword(BaseTest):
 
 
     def test_reset_password_returns_200(self):
-        result = self.app.post("/api/v1/reset-password")
+        data = json.dumps({"email": "test@example.com"})
+        result = self.app.post("/api/v1/reset-password", data=data)
         self.assertEqual(result.status_code, 200)
 
 
     def test_reset_password_returns_422_if_no_email(self):
         result = self.app.post("/api/v1/reset-password")
-        self.assertEqual(result.status_code, 401)
+        self.assertEqual(result.status_code, 422)

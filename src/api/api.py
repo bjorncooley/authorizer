@@ -136,5 +136,8 @@ def login():
 
 @app.route("/api/v1/reset-password", methods=["POST"])
 def reset_password():
+    error = check_params(request, ["email"])
+    if error:
+        return error
     return make_response("OK", 200)
 
