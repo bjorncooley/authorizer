@@ -35,3 +35,8 @@ class TestResetPassword(BaseTest):
         curr.execute(query)
         results = curr.fetchall()
         self.assertIsNotNone(results[0][0])
+
+
+    def test_reset_password_returns_200(self):
+        result = self.app.post("/api/v1/reset-password")
+        self.assertEqual(result.status_code, 200)
