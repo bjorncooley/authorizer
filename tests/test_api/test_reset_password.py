@@ -60,3 +60,13 @@ class TestResetPassword(BaseTest):
         })
         result = self.app.post("/api/v1/reset-password", data=data)
         self.assertEqual(result.status_code, 422)
+
+
+    def test_reset_password_returns_422_if_token_does_not_exist(self):
+        data = json.dumps({
+            "token": "testtoken",
+            "password": "testpass2",
+            "passwordCheck": "testpass2",
+        })
+        result = self.app.post("/api/v1/reset-password", data=data)
+        self.assertEqual(result.status_code, 422)
