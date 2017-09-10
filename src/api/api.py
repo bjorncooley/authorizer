@@ -183,5 +183,13 @@ def reset_password():
     if error:
         return error
 
+    data = json.loads(request.data.decode('utf-8'))
+    token = data["token"]
+    password = data["password"]
+    password_check = data["passwordCheck"]
+
+    if password != password_check:
+        return make_response("Passwords do not match", 422)
+
     return make_response("OK", 200)
 
