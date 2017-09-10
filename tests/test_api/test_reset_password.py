@@ -50,3 +50,13 @@ class TestResetPassword(BaseTest):
     def test_reset_password_returns_422_if_missing_params(self):
         result = self.app.post("/api/v1/reset-password")
         self.assertEqual(result.status_code, 422)
+
+
+    def test_reset_password_returns_422_if_password_do_no_match(self):
+        data = json.dumps({
+            "token": "testtoken",
+            "password": "testpass2",
+            "passwordCheck": "testpass3",
+        })
+        result = self.app.post("/api/v1/reset-password", data=data)
+        self.assertEqual(result.status_code, 422)
