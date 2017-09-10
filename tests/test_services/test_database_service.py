@@ -194,7 +194,7 @@ class TestDatabaseService(BaseTest):
         self.assertIsNotNone(user)
 
 
-    def test_database_service_returns_correct_user_data(self):
+    def test_database_service_returns_correct_user_data_on_get_user(self):
         email = 'test@example.com'
         password = 'testpass'
         user_type = 'testtype'
@@ -228,3 +228,15 @@ class TestDatabaseService(BaseTest):
         curr.close()
         self.assertIsNotNone(results[0])
 
+
+    def test_database_service_can_validate_saved_reset_token(self):
+        email = 'test@example.com'
+        token = 'testtoken'
+
+        curr = self.conn.cursor()
+        data = (email, token)
+        query = "INSERT INTO reset_tokens (email, token) VALUES (%s, %s)"
+        curr.execute(query, data)
+
+        user_email = self.db.validate_token(token=token)
+        self.assertIsNotNone(user_email)

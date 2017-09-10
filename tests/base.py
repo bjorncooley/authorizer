@@ -1,7 +1,12 @@
 from nose.tools import nottest
+import os
 import psycopg2
 import unittest
 
+from config.api.api_config import (
+    SANDBOX_MAILGUN_KEY,
+    SANDBOX_MAILGUN_URL,
+)
 from config.db.database_config import (
     LOCAL_DBUSER,
     LOCAL_DBPASS,
@@ -25,6 +30,9 @@ class BaseTest(unittest.TestCase):
 
     def setUp(self):
         self.conn = self.connect_db(DBNAME, DBUSER, DBPASS, DBHOST, DBPORT)
+        os.environ["MAILGUN_KEY"] = SANDBOX_MAILGUN_KEY
+        os.environ["MAILGUN_URL"] = SANDBOX_MAILGUN_URL
+
 
     def tearDown(self):
         curr = self.conn.cursor()
