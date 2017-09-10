@@ -56,12 +56,13 @@ def check_params(request, required_fields):
 def send_reset_link(email, token):
 
     mailgun_key = app.config["MAILGUN_KEY"]
-    if not mailgun_key:
-        logger.warning("No Mailgun Key in environment")
+    mailgun_url = app.config["MAILGUN_URL"]
+    if not mailgun_key or not mailgun_url:
+        logger.warning("Mailgun key or URL not in environment")
         return make_response("OK", 200)
 
     reset_link = "https://videos.missionu.com/reset-password/%s" % token
-    mailgun_link = "https://api:%s@api.mailgun.net/v3/mg.missionu.com/messages" % mailgun_key
+    mailgun_link = "https://api:%s@%s" % (mailgun_key, mailgun_url)
     data = {
         "from": "MissionU <mailgun@missionu.com>",
         "to": email,
