@@ -176,3 +176,8 @@ def forgot_password():
     db.save_token(email=email, token=token)
     return make_response("OK", 200)
 
+
+@app.route("/api/v1/reset-password", methods=["POST"])
+def reset_password():
+    return make_response("OK", 200)
+
