@@ -239,9 +239,5 @@ class TestDatabaseService(BaseTest):
         curr.execute(query, data)
         self.conn.commit()
 
-        query = "SELECT * FROM reset_tokens"
-        curr.execute(query)
-        results = curr.fetchall()
-
         user_email = self.db.validate_token(token=token)
         self.assertIsNotNone(user_email)
