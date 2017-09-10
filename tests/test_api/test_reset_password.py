@@ -76,3 +76,24 @@ class TestResetPassword(BaseTest):
         })
         result = self.app.post("/api/v1/reset-password", data=data)
         self.assertEqual(result.status_code, 422)
+
+
+    def test_reset_password_updates_password(self):
+        email = "test@example.com"
+        token = "testtoken"
+        password1 = "testpassword1"
+        password2 = "testpassword2"
+
+        db = DatabaseService()
+        db.save_user(email=email, password=password1)
+        db.save_token(email=email, token=token)
+        data = json.dumps({
+            "token": token,
+            "password": password2,
+            "passwordCheck": password2,
+        })
+
+        self.app.post("/api/v1/reset-password", data=data)
+        result = db.authenticate_user(email=email, password=password2)
+        self.assertIsNotNone(result)
+
