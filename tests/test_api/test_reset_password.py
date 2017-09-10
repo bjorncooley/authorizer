@@ -38,7 +38,12 @@ class TestResetPassword(BaseTest):
 
 
     def test_reset_password_returns_200(self):
-        result = self.app.post("/api/v1/reset-password")
+        data = json.dumps({
+            "token": "testtoken",
+            "password": "testpass2",
+            "passwordCheck": "testpass2",
+        })
+        result = self.app.post("/api/v1/reset-password", data=data)
         self.assertEqual(result.status_code, 200)
 
 
