@@ -88,6 +88,18 @@ class DatabaseService:
         result = self.conn.execute(i)
 
 
+    def update_password(self, email, password):
+        assert email != "", "email must not be empty"
+        assert password != "", "Password must not be empty"
+
+        hashed_password = generate_password_hash(password)
+
+        u = self.users.update().where(
+            self.users.c.email == email).values(
+            password = hashed_password)
+        self.conn.execute(u)
+
+
     def validate_token(self, token):
         assert token != "", "token must not be empty"
 
