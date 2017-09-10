@@ -2,6 +2,7 @@
 from api import api
 import json
 from tests.base import BaseTest
+from services.database_service import DatabaseService
 
 
 class TestResetPassword(BaseTest):
@@ -38,8 +39,13 @@ class TestResetPassword(BaseTest):
 
 
     def test_reset_password_returns_200(self):
+        email = "test@example.com"
+        token = "testtoken"
+
+        db = DatabaseService()
+        db.save_token(email=email, token=token)
         data = json.dumps({
-            "token": "testtoken",
+            "token": token,
             "password": "testpass2",
             "passwordCheck": "testpass2",
         })

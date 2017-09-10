@@ -191,5 +191,10 @@ def reset_password():
     if password != password_check:
         return make_response("Passwords do not match", 422)
 
+    db = DatabaseService()
+    user_email = db.validate_token(token=token)
+    if not user_email:
+        return make_response("Invalid token", 422)
+
     return make_response("OK", 200)
 
