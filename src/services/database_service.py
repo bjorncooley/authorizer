@@ -86,3 +86,18 @@ class DatabaseService:
             user_type=user_type,
         )
         result = self.conn.execute(i)
+
+
+    def validate_token(self, token):
+        assert token != "", "token must not be empty"
+
+        q = select([self.reset_tokens.c.email]).where(
+            self.reset_tokens.c.token == token)
+        result = self.conn.execute(q)
+        row = result.fetchone()
+
+        if row is None:
+            return None
+
+        return row[0]
+

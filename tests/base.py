@@ -28,6 +28,7 @@ class BaseTest(unittest.TestCase):
         conn = psycopg2.connect("dbname={0} user={1} password={2} host={3} port={4}".format(dbname, dbuser, dbpass, dbhost, dbport))
         return conn
 
+
     def setUp(self):
         self.conn = self.connect_db(DBNAME, DBUSER, DBPASS, DBHOST, DBPORT)
         os.environ["MAILGUN_KEY"] = SANDBOX_MAILGUN_KEY
