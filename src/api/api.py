@@ -196,7 +196,7 @@ def reset_password():
     if not user_email:
         return make_response("Invalid token", 422)
 
-    
+    db.update_password(email=user_email, password=password)
 
     return make_response("OK", 200)
 
