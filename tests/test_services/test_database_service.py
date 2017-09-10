@@ -241,3 +241,27 @@ class TestDatabaseService(BaseTest):
 
         user_email = self.db.validate_token(token=token)
         self.assertIsNotNone(user_email)
+
+
+    def test_database_service_can_update_password(self):
+        email = 'test@example.com'
+        password1 = 'testpass1'
+        password2 = 'testpass2'
+
+        self.db.save_user(email=email, password=password1)
+        query = "SELECT password FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        curr.close()
+        first_password = results[0][0]
+
+        self.db.update_password(email=email, password=password2)
+        query = "SELECT password FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        curr.close()
+        second_password = results[0][0]
+
+        self.assertNotEqual(first_password, second_password)

@@ -196,5 +196,7 @@ def reset_password():
     if not user_email:
         return make_response("Invalid token", 422)
 
+    
+
     return make_response("OK", 200)
 
