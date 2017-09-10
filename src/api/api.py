@@ -130,7 +130,13 @@ def get_profile():
 
     db = DatabaseService()
     user = db.get_user(email)
-    return jsonify(user)
+    formattedUser = {
+        "email": user["email"],
+        "firstName": user["first_name"],
+        "lastName": user["last_name"],
+        "userType": user["user_type"],
+    }
+    return jsonify(formattedUser)
 
 
 @app.route("/api/v1/login", methods=["POST"])

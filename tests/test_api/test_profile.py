@@ -33,6 +33,21 @@ class TestProfile(BaseTest):
 
 
     def test_get_profile_returns_200(self):
+        db = DatabaseService()
+        email = "test@example.com"
+        password = "testpass"
+        first_name = "First"
+        last_name = "Last"
+        user_type = "testtype"
+
+        db.save_user(
+            email=email,
+            password=password,
+            user_type=user_type,
+            first_name=first_name,
+            last_name=last_name,
+        )
+        
         result = self.get_request_with_token("/api/v1/profile/get")
         self.assertEqual(200, result.status_code)
 
@@ -61,6 +76,6 @@ class TestProfile(BaseTest):
         result = self.get_request_with_token("/api/v1/profile/get")
         data = json.loads(result.data)
         self.assertEqual(data["email"], email)
-        self.assertEqual(data["user_type"], user_type)
-        self.assertEqual(data["first_name"], first_name)
-        self.assertEqual(data["last_name"], last_name)
+        self.assertEqual(data["userType"], user_type)
+        self.assertEqual(data["firstName"], first_name)
+        self.assertEqual(data["lastName"], last_name)

@@ -36,7 +36,6 @@ class DatabaseService:
     def get_user(self, email):
         assert email != "", "email must not be empty"
 
-        print("EMAIL IS %r" % email)
         q = select([
             self.users.c.first_name,
             self.users.c.last_name,
@@ -49,11 +48,10 @@ class DatabaseService:
         user = None
         if row is not None:
             user = {}
-            user['first_name'] = row[0]
-            user['last_name'] = row[1]
-            user['user_type'] = row[2]
-            user['email'] = email
-        print("RESULT IS %r" % row)
+            user["first_name"] = row[0]
+            user["last_name"] = row[1]
+            user["user_type"] = row[2]
+            user["email"] = email
         return user
 
 
