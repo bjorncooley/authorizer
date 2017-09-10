@@ -15,20 +15,20 @@ class TestResetPassword(BaseTest):
         super(TestResetPassword, self).tearDown()
 
 
-    def test_reset_password_returns_200(self):
+    def test_forgot_password_returns_200(self):
         data = json.dumps({"email": "test@example.com"})
-        result = self.app.post("/api/v1/reset-password", data=data)
+        result = self.app.post("/api/v1/forgot-password", data=data)
         self.assertEqual(result.status_code, 200)
 
 
-    def test_reset_password_returns_422_if_no_email(self):
-        result = self.app.post("/api/v1/reset-password")
+    def test_forgot_password_returns_422_if_no_email(self):
+        result = self.app.post("/api/v1/forgot-password")
         self.assertEqual(result.status_code, 422)
 
 
-    def test_reset_password_creates_new_reset_token(self):
+    def test_forgot_password_creates_new_forgot_token(self):
         data = json.dumps({"email": "test@example.com"})
-        self.app.post("/api/v1/reset-password", data=data)
+        self.app.post("/api/v1/forgot-password", data=data)
 
         query = "SELECT token FROM reset_tokens"
         curr = self.conn.cursor()
