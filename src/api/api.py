@@ -15,6 +15,11 @@ import requests
 import string
 import sys
 
+from lib.lib import (
+    get_request_data,
+    handle_error,
+)
+
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
 sys.path.insert(0, SRC_DIR)
@@ -137,6 +142,23 @@ def get_profile():
         "userType": user["user_type"],
     }
     return jsonify(formattedUser)
+
+
+@app.route("/api/v1/validation-token/create", methods=["POST"])
+def create_validation_token():
+    try:
+        data = get_request_data(
+            request,
+            required_params=["email"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message=str(e),
+            logger=logger,
+            status_code=422,
+        )
+
+    return make_response("OK", 200)
 
 
 @app.route("/api/v1/login", methods=["POST"])
