@@ -41,5 +41,7 @@ class BaseTest(unittest.TestCase):
         curr.execute(query)
         query = "DELETE FROM reset_tokens"
         curr.execute(query)
+        query = "DELETE FROM validation_tokens"
+        curr.execute(query)
         self.conn.commit()
         self.conn.close()
