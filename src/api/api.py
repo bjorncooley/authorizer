@@ -15,16 +15,15 @@ import requests
 import string
 import sys
 
-from lib.lib import (
-    get_request_data,
-    handle_error,
-)
-
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
 sys.path.insert(0, SRC_DIR)
 sys.path.insert(0, BASE_DIR)
 
+from lib.lib import (
+    get_request_data,
+    handle_error,
+)
 from services.database_service import DatabaseService
 
 app = Flask(__name__)
@@ -158,7 +157,8 @@ def create_validation_token():
             status_code=422,
         )
 
-    return make_response("OK", 200)
+    token = DatabaseService().create_validation_token(email=data["email"])
+    return jsonify({"token": token})
 
 
 @app.route("/api/v1/login", methods=["POST"])

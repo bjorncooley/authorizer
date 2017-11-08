@@ -55,5 +55,12 @@ class DatabaseConfig:
             Column('token', String),
         )
 
+        self.validation_tokens = Table('validation_tokens', self.metadata,
+            Column('email', String),
+            Column('id', Integer, primary_key=True),
+            Column('time_created', DateTime(timezone=True), onupdate=datetime.datetime.now),
+            Column('token', String),
+        )
+
     def create_tables(self):
         self.metadata.create_all(self.engine)

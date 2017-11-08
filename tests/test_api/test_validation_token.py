@@ -25,3 +25,8 @@ class TestResetPassword(BaseTest):
         result = self.app.post("/api/v1/validation-token/create")
         self.assertEqual(result.status_code, 422)
 
+
+    def test_create_validation_token_returns_token(self):
+        data = json.dumps({"email": "test@example.com"})
+        result = self.app.post("/api/v1/validation-token/create", data=data)
+        self.assertIsNotNone(json.loads(result.data)['token'])

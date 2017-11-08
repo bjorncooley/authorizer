@@ -1,5 +1,7 @@
+import random
 import sqlalchemy
 from sqlalchemy import select
+import string
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config.db.database_config import DatabaseConfig
@@ -11,6 +13,7 @@ class DatabaseService:
         db_config = DatabaseConfig()
         self.conn = db_config.engine.connect()
         self.reset_tokens = db_config.reset_tokens
+        self.validation_tokens = db_config.validation_tokens
         self.users = db_config.users
 
 
@@ -31,6 +34,24 @@ class DatabaseService:
             return row[1]
         else:
             return None
+
+
+    def create_validation_token(self, email):
+        assert email != "", "email must not be empty"
+        i = self.validation_tokens.insert().returning(
+            self.validation_tokens.c.id).values(
+            email=email
+        )
+        row_id = self.conn.execute(i).fetchone()[0]
+        s = "".join(random.choice(string.ascii_lowercase) for _ in range(8))
+        token = "%s%d" % (s, row_id)
+
+        u = self.validation_tokens.update().where(
+            self.validation_tokens.c.id == row_id
+        ).values(token=token)
+        self.conn.execute(u)
+
+        return token
 
 
     def get_user(self, email):
