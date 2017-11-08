@@ -32,9 +32,9 @@ class TestValidationToken(BaseTest):
         self.assertIsNotNone(json.loads(result.data)["token"])
 
 
-    def test_confirm_validation_token_returns_200(self):
-        result = self.app.get("/api/v1/validation-token/confirm?token=testtoken")
-        self.assertEqual(result.status_code, 200)
+    def test_confirm_validation_token_returns_401_with_invalid_data(self):
+        result = self.app.get("/api/v1/validation-token/confirm?token=invalidtoken")
+        self.assertEqual(result.status_code, 401)
 
 
     def test_confirm_validation_token_returns_422_if_missing_data(self):
