@@ -161,6 +161,23 @@ def create_validation_token():
     return jsonify({"token": token})
 
 
+@app.route("/api/v1/validation-token/confirm", methods=["GET"])
+def confirm_validation_token():
+    try:
+        data = get_request_data(
+            request,
+            required_params=["token"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message=str(e),
+            logger=logger,
+            status_code=422,
+        )
+
+    return make_response("OK", 200)
+
+
 @app.route("/api/v1/login", methods=["POST"])
 def login():
     error = check_params(request, ["email", "password"])
