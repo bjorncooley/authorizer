@@ -76,11 +76,6 @@ def send_reset_link(email, token):
     return requests.post(mailgun_link, data=data)
 
 
-@app.route("/api/v1/health-check", methods=["GET"])
-def health_check():
-    return make_response("OK", 200)
-
-
 @app.route("/api/v1/create-user", methods=["POST"])
 def create_user():
     
@@ -114,6 +109,48 @@ def create_user():
     return make_response("OK", 200)
 
 
+@app.route("/api/v1/validation-token/confirm", methods=["GET"])
+def confirm_validation_token():
+    try:
+        data = get_request_data(
+            request,
+            required_params=["token"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message=str(e),
+            logger=logger,
+            status_code=422,
+        )
+
+    try:
+        email = DatabaseService().confirm_validation_token(data["token"])
+        if email is not None:
+            return jsonify({"email": email})
+    except TypeError:
+        logger.error("Could not get email for token %s" % token)
+
+    return make_response("Invalid token", 401)
+
+
+@app.route("/api/v1/validation-token/create", methods=["POST"])
+def create_validation_token():
+    try:
+        data = get_request_data(
+            request,
+            required_params=["email"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message=str(e),
+            logger=logger,
+            status_code=422,
+        )
+
+    token = DatabaseService().create_validation_token(email=data["email"])
+    return jsonify({"token": token})
+
+
 @app.route("/api/v1/profile/get", methods=["GET"])
 def get_profile():
 
@@ -143,44 +180,9 @@ def get_profile():
     return jsonify(formattedUser)
 
 
-@app.route("/api/v1/validation-token/create", methods=["POST"])
-def create_validation_token():
-    try:
-        data = get_request_data(
-            request,
-            required_params=["email"],
-        )
-    except (ValueError, TypeError) as e:
-        return handle_error(    
-            message=str(e),
-            logger=logger,
-            status_code=422,
-        )
-
-    token = DatabaseService().create_validation_token(email=data["email"])
-    return jsonify({"token": token})
-
-
-@app.route("/api/v1/validation-token/confirm", methods=["GET"])
-def confirm_validation_token():
-    try:
-        data = get_request_data(
-            request,
-            required_params=["token"],
-        )
-    except (ValueError, TypeError) as e:
-        return handle_error(    
-            message=str(e),
-            logger=logger,
-            status_code=422,
-        )
-
-    try:
-        email = DatabaseService().confirm_validation_token(data["token"])
-    except TypeError:
-        return make_response("Invalid token", 401)
-
-    return jsonify({"email": email})
+@app.route("/api/v1/health-check", methods=["GET"])
+def health_check():
+    return make_response("OK", 200)
 
 
 @app.route("/api/v1/login", methods=["POST"])
