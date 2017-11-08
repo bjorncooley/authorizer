@@ -2,6 +2,7 @@ import random
 import sqlalchemy
 from sqlalchemy import select
 import string
+import uuid
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config.db.database_config import DatabaseConfig
@@ -38,18 +39,21 @@ class DatabaseService:
 
     def create_validation_token(self, email):
         assert email != "", "email must not be empty"
-        i = self.validation_tokens.insert().returning(
-            self.validation_tokens.c.id).values(
-            email=email
-        )
-        row_id = self.conn.execute(i).fetchone()[0]
-        s = "".join(random.choice(string.ascii_lowercase) for _ in range(8))
-        token = "%s%d" % (s, row_id)
 
-        u = self.validation_tokens.update().where(
-            self.validation_tokens.c.id == row_id
-        ).values(token=token)
-        self.conn.execute(u)
+        # Try to generate unique token up to 3 times. Assume that if cannot
+        # generate unique token on the 3rd round something is broken,
+        # return nil
+        for i in range(3):
+            token = uuid.uuid4().hex
+
+            try:
+                self.conn.execute(self.validation_tokens.insert().values(
+                    email=email,
+                    token=token,
+                ))
+                break
+            except sqlalchemy.exc.IntegrityError:
+                token = None
 
         return token
 

@@ -148,6 +148,9 @@ def create_validation_token():
         )
 
     token = DatabaseService().create_validation_token(email=data["email"])
+    if token is None:
+        return make_response("Could not generate unique token", 500)
+        
     return jsonify({"token": token})
 
 
