@@ -54,6 +54,15 @@ class DatabaseService:
         return token
 
 
+    def confirm_validation_token(self, token):
+        assert token != "", "token must not be empty"
+
+        q = select([self.validation_tokens.c.email]).where(
+            self.validation_tokens.c.token == token
+        )
+        return self.conn.execute(q).fetchone()[0]
+
+
     def get_user(self, email):
         assert email != "", "email must not be empty"
 

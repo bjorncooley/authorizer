@@ -175,7 +175,9 @@ def confirm_validation_token():
             status_code=422,
         )
 
-    return make_response("OK", 200)
+    return jsonify({
+        "email": DatabaseService().confirm_validation_token(data["token"])
+    })
 
 
 @app.route("/api/v1/login", methods=["POST"])
