@@ -128,7 +128,7 @@ def confirm_validation_token():
         if email is not None:
             return jsonify({"email": email})
     except TypeError:
-        logger.error("Could not get email for token %s" % token)
+        logger.error("Could not get email for token %s" % data["token"])
 
     return make_response("Invalid token", 401)
 
