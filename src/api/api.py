@@ -14,6 +14,7 @@ import random
 import requests
 import string
 import sys
+import uuid
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
@@ -23,6 +24,7 @@ sys.path.insert(0, BASE_DIR)
 from lib.lib import (
     get_request_data,
     handle_error,
+    send_reset_link,
 )
 from services.database_service import DatabaseService
 
@@ -55,25 +57,6 @@ def check_params(request, required_fields):
         return make_response("The following fields are required: %r" % missing_fields, 422)
 
     return None
-
-
-def send_reset_link(email, token):
-
-    mailgun_key = app.config["MAILGUN_KEY"]
-    mailgun_url = app.config["MAILGUN_URL"]
-    if not mailgun_key or not mailgun_url:
-        logger.warning("Mailgun key or URL not in environment")
-        return make_response("OK", 200)
-
-    reset_link = "https://videos.missionu.com/reset-password/%s" % token
-    mailgun_link = "https://api:%s@%s" % (mailgun_key, mailgun_url)
-    data = {
-        "from": "MissionU <mailgun@missionu.com>",
-        "to": email,
-        "subject": "Password reset link from MissionU",
-        "text": "Please use this link to reset your password: %s" % reset_link,
-    }
-    return requests.post(mailgun_link, data=data)
 
 
 @app.route("/api/v1/create-user", methods=["POST"])
@@ -213,15 +196,25 @@ def login():
 
 @app.route("/api/v1/forgot-password", methods=["POST"])
 def forgot_password():
-    error = check_params(request, ["email"])
-    if error:
-        return error
 
-    data = json.loads(request.data.decode('utf-8'))
-    email = data["email"]
-    token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
+    try:
+        data = get_request_data(
+            request,
+            required_params=["email", "resetURL"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message=str(e),
+            logger=logger,
+            status_code=422,
+        )
 
-    mailgun_response = send_reset_link(email=email, token=token)
+    token = uuid.uuid4().hex
+    mailgun_response = send_reset_link(
+        email=data["email"],
+        token=token,
+        url=data["resetURL"],
+    )
     if mailgun_response.status_code != 200:
         return make_response(
             '''There was an error sending your reset link,
@@ -229,7 +222,10 @@ def forgot_password():
             % mailgun_response.text)
 
     db = DatabaseService()
-    db.save_reset_token(email=email, token=token)
+    db.save_reset_token(
+        email=data["email"], 
+        token=token,
+    )
     return make_response("OK", 200)
 
 
