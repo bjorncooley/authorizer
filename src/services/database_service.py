@@ -89,7 +89,7 @@ class DatabaseService:
         return user
 
 
-    def save_token(self, email, token):
+    def save_reset_token(self, email, token):
         assert email != "", "email must not be empty"
         assert token != "", "token must not be empty"
 
@@ -132,7 +132,7 @@ class DatabaseService:
         self.conn.execute(u)
 
 
-    def validate_token(self, token):
+    def validate_reset_token(self, token):
         assert token != "", "token must not be empty"
 
         q = select([self.reset_tokens.c.email]).where(

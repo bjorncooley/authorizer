@@ -42,7 +42,7 @@ class TestResetPassword(BaseTest):
         token = "testtoken"
 
         db = DatabaseService()
-        db.save_token(email=email, token=token)
+        db.save_reset_token(email=email, token=token)
         data = json.dumps({
             "token": token,
             "password": "testpass2",
@@ -85,7 +85,7 @@ class TestResetPassword(BaseTest):
 
         db = DatabaseService()
         db.save_user(email=email, password=password1)
-        db.save_token(email=email, token=token)
+        db.save_reset_token(email=email, token=token)
         data = json.dumps({
             "token": token,
             "password": password2,
@@ -105,7 +105,7 @@ class TestResetPassword(BaseTest):
 
         db = DatabaseService()
         db.save_user(email=email, password=password1)
-        db.save_token(email=email, token=token)
+        db.save_reset_token(email=email, token=token)
         data = json.dumps({
             "token": token,
             "password": password2,

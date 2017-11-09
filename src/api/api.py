@@ -229,7 +229,7 @@ def forgot_password():
             % mailgun_response.text)
 
     db = DatabaseService()
-    db.save_token(email=email, token=token)
+    db.save_reset_token(email=email, token=token)
     return make_response("OK", 200)
 
 
@@ -248,7 +248,7 @@ def reset_password():
         return make_response("Passwords do not match", 422)
 
     db = DatabaseService()
-    user_email = db.validate_token(token=token)
+    user_email = db.validate_reset_token(token=token)
     if not user_email:
         return make_response("Invalid token", 422)
 

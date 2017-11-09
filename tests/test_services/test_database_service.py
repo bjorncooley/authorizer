@@ -216,7 +216,7 @@ class TestDatabaseService(BaseTest):
 
 
     def test_database_service_can_save_reset_token(self):
-        self.db.save_token(
+        self.db.save_reset_token(
             email='test@example.com',
             token='thisisatesttoken',
         )
@@ -239,7 +239,7 @@ class TestDatabaseService(BaseTest):
         curr.execute(query, data)
         self.conn.commit()
 
-        user_email = self.db.validate_token(token=token)
+        user_email = self.db.validate_reset_token(token=token)
         self.assertIsNotNone(user_email)
 
 
