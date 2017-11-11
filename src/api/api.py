@@ -1,3 +1,11 @@
+import logging
+from pprint import pprint
+import os
+import random
+import string
+import sys
+import uuid
+
 from flask import (
     Flask,
     jsonify,
@@ -7,14 +15,8 @@ from flask import (
 from flask_cors import CORS
 import json
 from jose import jwt
-import logging
-from pprint import pprint
-import os
-import random
 import requests
-import string
-import sys
-import uuid
+from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
@@ -81,13 +83,16 @@ def create_user():
         user_type = data["user_type"]
 
     db = DatabaseService()
-    db.save_user(
-        email=email, 
-        password=password,
-        first_name=first_name,
-        last_name=last_name,
-        user_type=user_type,
-    )
+    try:
+        db.save_user(
+            email=email, 
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            user_type=user_type,
+        )
+    except SQLIntegrityError:
+        return make_response("User %s already exists" % data["email"], 409)
 
     return make_response("OK", 200)
 
