@@ -16,7 +16,10 @@ class TestResetPassword(BaseTest):
 
 
     def test_forgot_password_returns_200(self):
-        data = json.dumps({"email": "test@example.com"})
+        data = json.dumps({
+            "email": "test@example.com",
+            "resetURL": "http://localhost/reset-token",
+        })
         result = self.app.post("/api/v1/forgot-password", data=data)
         self.assertEqual(result.status_code, 200)
 
@@ -27,7 +30,10 @@ class TestResetPassword(BaseTest):
 
 
     def test_forgot_password_creates_new_forgot_token(self):
-        data = json.dumps({"email": "test@example.com"})
+        data = json.dumps({
+            "email": "test@example.com",
+            "resetURL": "http://localhost/reset-token",
+        })
         self.app.post("/api/v1/forgot-password", data=data)
 
         query = "SELECT token FROM reset_tokens"

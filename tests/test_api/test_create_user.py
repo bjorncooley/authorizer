@@ -56,6 +56,13 @@ class TestAPI(BaseTest):
         self.assertEqual(422, response.status_code)
 
 
+    def test_create_user_returns_409_if_user_already_exists(self):
+        data = json.dumps({"email": "test@example.com", "password": "testpass"})
+        self.app.post("/api/v1/create-user", data=data)
+        response = self.app.post("/api/v1/create-user", data=data)
+        self.assertEqual(409, response.status_code)
+
+
     def test_create_user_saves_new_user_to_db(self):
         data = json.dumps({"email": "test@example.com", "password": "testpass"})
         self.app.post("/api/v1/create-user", data=data)
