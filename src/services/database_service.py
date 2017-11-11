@@ -97,7 +97,7 @@ class DatabaseService:
             email=email,
             token=token,
         )
-        result = self.conn.execute(i)
+        self.conn.execute(i)
 
 
     def save_user(self, email, password, user_type=None, first_name=None, last_name=None):

@@ -13,6 +13,8 @@ from config.db.database_config import (
     LOCAL_DBNAME,
     LOCAL_DBHOST,
 )
+from tests.test_api.mock_server import MockServer
+
 
 DBUSER = LOCAL_DBUSER
 DBPASS = LOCAL_DBPASS
@@ -31,11 +33,13 @@ class BaseTest(unittest.TestCase):
 
     def setUp(self):
         self.conn = self.connect_db(DBNAME, DBUSER, DBPASS, DBHOST, DBPORT)
-        os.environ["MAILGUN_KEY"] = SANDBOX_MAILGUN_KEY
-        os.environ["MAILGUN_URL"] = SANDBOX_MAILGUN_URL
+        self.server = MockServer(port=1234)
+        self.server.start()
+        os.environ["EMAIL_ENDPOINT"] = self.server.url + "/mailgun"
 
 
     def tearDown(self):
+        self.server.shutdown_server()
         curr = self.conn.cursor()
         query = "DELETE FROM users"
         curr.execute(query)

@@ -224,7 +224,7 @@ def forgot_password():
         return make_response(
             '''There was an error sending your reset link,
             please email tech@missionu.com with this error: %s'''
-            % mailgun_response.text)
+            % mailgun_response.text, mailgun_response.status_code)
 
     db = DatabaseService()
     db.save_reset_token(
