@@ -1,0 +1,25 @@
+# customize CircleCI deploy
+machine:
+  # python version
+  python:
+    version: 3.6.1
+
+test:
+  override:
+    - ./scripts/test.py
+
+# AWS CodeDeploy settings
+deployment:
+  staging:
+    branch: staging
+    codedeploy:
+      Authorizer-Staging:
+        application_root: /
+        revision_location:
+          revision_type: S3
+          s3_location:
+            bucket: missionu-deployments
+            key_pattern: authorizer-staging/deploy-{SHORT_COMMIT}-{BUILD_NUM}
+        region: us-west-1
+        deployment_group: InPlace-1
+        deployment_config: CodeDeployDefault.OneAtATime
