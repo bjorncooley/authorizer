@@ -21,12 +21,12 @@ class TestResetPassword(BaseTest):
             "email": "test@example.com",
             "resetURL": "http://localhost/reset-token",
         })
-        result = self.app.post("/api/v1/forgot-password", data=data)
+        result = self.app.post("/api/v1/reset-token/send", data=data)
         self.assertEqual(result.status_code, 200)
 
 
     def test_forgot_password_returns_422_if_no_email(self):
-        result = self.app.post("/api/v1/forgot-password")
+        result = self.app.post("/api/v1/reset-token/send")
         self.assertEqual(result.status_code, 422)
 
 
@@ -35,7 +35,7 @@ class TestResetPassword(BaseTest):
             "email": "test@example.com",
             "resetURL": "http://localhost/reset-token",
         })
-        self.app.post("/api/v1/forgot-password", data=data)
+        self.app.post("/api/v1/reset-token/send", data=data)
 
         query = "SELECT token FROM reset_tokens"
         curr = self.conn.cursor()
