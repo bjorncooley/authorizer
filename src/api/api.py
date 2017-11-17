@@ -199,7 +199,7 @@ def login():
     return jsonify({"token": token})
 
 
-@app.route("/api/v1/forgot-password", methods=["POST"])
+@app.route("/api/v1/reset-token/send", methods=["POST"])
 def forgot_password():
 
     try:
