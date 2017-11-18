@@ -2,8 +2,10 @@
 machine:
   python:
     version: 3.6.1
-  environment:
-    DATABASE_URL: postgresql://test_admin:T3stTh4t@main-test.cmmrjsgb2ell.us-west-1.rds.amazonaws.com:5432/main_test
+
+database:
+  override:
+    psql -U ubuntu -d circle_test -a -f ./scripts/schema.sql
 
 
 test:
