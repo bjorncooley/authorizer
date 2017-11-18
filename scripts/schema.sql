@@ -1,4 +1,3 @@
-pg_dump -U staging_admin -d main_staging -h main-staging.cmmrjsgb2ell.us-west-1.rds.amazonaws.com -s
 --
 -- PostgreSQL database dump
 --

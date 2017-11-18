@@ -11,7 +11,7 @@ machine:
 
 database:
   override:
-    - psql -U ubuntu -d circle_test -a -f ./scripts/schema.sql
+    - psql -U ubuntu -d circle_test < ./scripts/schema.sql
 
 test:
   override:
