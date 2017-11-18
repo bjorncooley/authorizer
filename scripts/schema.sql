@@ -49,7 +49,7 @@ CREATE TABLE cohorts (
 );
 
 
-ALTER TABLE cohorts OWNER TO staging_admin;
+
 
 --
 -- Name: cohorts_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -63,7 +63,7 @@ CREATE SEQUENCE cohorts_id_seq
     CACHE 1;
 
 
-ALTER TABLE cohorts_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: cohorts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -85,7 +85,7 @@ CREATE TABLE comments (
 );
 
 
-ALTER TABLE comments OWNER TO staging_admin;
+
 
 --
 -- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -99,7 +99,7 @@ CREATE SEQUENCE comments_id_seq
     CACHE 1;
 
 
-ALTER TABLE comments_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -124,7 +124,7 @@ CREATE TABLE courses (
 );
 
 
-ALTER TABLE courses OWNER TO staging_admin;
+
 
 --
 -- Name: courses_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -138,7 +138,7 @@ CREATE SEQUENCE courses_id_seq
     CACHE 1;
 
 
-ALTER TABLE courses_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: courses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -166,7 +166,7 @@ CREATE TABLE interviews (
 );
 
 
-ALTER TABLE interviews OWNER TO staging_admin;
+
 
 --
 -- Name: interviews_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -180,7 +180,7 @@ CREATE SEQUENCE interviews_id_seq
     CACHE 1;
 
 
-ALTER TABLE interviews_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: interviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -201,7 +201,7 @@ CREATE TABLE reset_tokens (
 );
 
 
-ALTER TABLE reset_tokens OWNER TO staging_admin;
+
 
 --
 -- Name: reset_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -215,7 +215,7 @@ CREATE SEQUENCE reset_tokens_id_seq
     CACHE 1;
 
 
-ALTER TABLE reset_tokens_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: reset_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -241,7 +241,7 @@ CREATE TABLE users (
 );
 
 
-ALTER TABLE users OWNER TO staging_admin;
+
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -255,7 +255,7 @@ CREATE SEQUENCE users_id_seq
     CACHE 1;
 
 
-ALTER TABLE users_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -276,7 +276,7 @@ CREATE TABLE validation_tokens (
 );
 
 
-ALTER TABLE validation_tokens OWNER TO staging_admin;
+
 
 --
 -- Name: validation_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -290,7 +290,7 @@ CREATE SEQUENCE validation_tokens_id_seq
     CACHE 1;
 
 
-ALTER TABLE validation_tokens_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: validation_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -310,7 +310,7 @@ CREATE TABLE video_users (
 );
 
 
-ALTER TABLE video_users OWNER TO staging_admin;
+
 
 --
 -- Name: video_users_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -324,7 +324,7 @@ CREATE SEQUENCE video_users_id_seq
     CACHE 1;
 
 
-ALTER TABLE video_users_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: video_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -362,7 +362,7 @@ CREATE TABLE videos (
 );
 
 
-ALTER TABLE videos OWNER TO staging_admin;
+
 
 --
 -- Name: videos_id_seq; Type: SEQUENCE; Schema: public; Owner: staging_admin
@@ -376,7 +376,7 @@ CREATE SEQUENCE videos_id_seq
     CACHE 1;
 
 
-ALTER TABLE videos_id_seq OWNER TO staging_admin;
+
 
 --
 -- Name: videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: staging_admin
@@ -631,15 +631,6 @@ ALTER TABLE ONLY videos
 ALTER TABLE ONLY videos
     ADD CONSTRAINT videos_host_id_fkey FOREIGN KEY (host_id) REFERENCES users(id);
 
-
---
--- Name: public; Type: ACL; Schema: -; Owner: staging_admin
---
-
-REVOKE ALL ON SCHEMA public FROM rdsadmin;
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO staging_admin;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
