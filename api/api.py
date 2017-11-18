@@ -18,9 +18,7 @@ from jose import jwt
 import requests
 from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 
-SRC_DIR = os.path.dirname(os.path.dirname(__file__))
-BASE_DIR = os.path.dirname(SRC_DIR)
-sys.path.insert(0, SRC_DIR)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, BASE_DIR)
 
 from lib.lib import (
