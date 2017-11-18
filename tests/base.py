@@ -27,6 +27,12 @@ class BaseTest(unittest.TestCase):
 
     @nottest
     def connect_db(self, dbname, dbuser, dbpass, dbhost, dbport):
+        if os.getenv("CIRCLECI"):
+            dbname = "circle_test"
+            dbuser = "ubuntu"
+            dbpass = ""
+            dbhost = "127.0.0.1"
+
         conn = psycopg2.connect("dbname={0} user={1} password={2} host={3} port={4}".format(dbname, dbuser, dbpass, dbhost, dbport))
         return conn
 
