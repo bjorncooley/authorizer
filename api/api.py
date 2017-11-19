@@ -176,21 +176,25 @@ def health_check():
 
 @app.route("/api/v1/login", methods=["POST"])
 def login():
-    error = check_params(request, ["email", "password"])
-    if error:
-        return error
-
-    data = json.loads(request.data.decode('utf-8'))
-    email = data["email"]
-    password = data["password"]
+    try:
+        data = get_request_data(request, ["email", "password"])
+    except (ValueError, TypeError) as e:
+        return handle_error(
+            message="Invalid parameters: %s" % str(e),
+            logger=logger,
+            status_code=422
+        )
 
     db = DatabaseService()
-    user_type = db.authenticate_user(email=email, password=password)
+    user_type = db.authenticate_user(
+        email=data["email"], 
+        password=data["password"],
+    )
     if not user_type:
         return make_response("Error: invalid credentials", 401)
 
     token = jwt.encode(
-        {"subject": email, "user_type": user_type},
+        {"subject": data["email"], "user_type": user_type},
         app.config["SECRET_KEY"],
         algorithm="HS256",
     )
