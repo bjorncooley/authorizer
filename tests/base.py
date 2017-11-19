@@ -39,7 +39,7 @@ class BaseTest(unittest.TestCase):
 
     def setUp(self):
         self.conn = self.connect_db(DBNAME, DBUSER, DBPASS, DBHOST, DBPORT)
-        self.server = MockServer(port=1234)
+        self.server = MockServer()
         self.server.start()
         os.environ["EMAIL_ENDPOINT"] = self.server.url + "/mailgun"
 
