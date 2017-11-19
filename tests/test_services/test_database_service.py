@@ -4,13 +4,6 @@ from tests.base import BaseTest
 from services.database_service import DatabaseService
 from werkzeug.security import check_password_hash
 
-from config.db.database_config import (
-    LOCAL_DBUSER,
-    LOCAL_DBPASS,
-    LOCAL_DBHOST,
-    LOCAL_DBNAME
-)
-DBPORT = "5432"
 
 class TestDatabaseService(BaseTest):
 

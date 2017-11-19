@@ -2,6 +2,11 @@
 machine:
   python:
     version: 3.6.1
+  environment:
+    DBHOST: 127.0.0.1
+    DBNAME: circle_test
+    DBPASS: ""
+    DBUSER: ubuntu
 
 database:
   override:
