@@ -1,6 +1,7 @@
 from nose.tools import nottest
 import os
 import psycopg2
+import time
 import unittest
 
 from config.api.api_config import (
@@ -55,3 +56,4 @@ class BaseTest(unittest.TestCase):
         curr.execute(query)
         self.conn.commit()
         self.conn.close()
+        time.sleep(0.01)
