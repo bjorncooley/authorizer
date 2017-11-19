@@ -33,6 +33,8 @@ def get_request_data(request, required_params):
         for param in required_params:
             if param not in data:
                 raise ValueError("%s must be included in request" % param)
+            if data[param] == "":
+                raise ValueError("%s must not be empty" % param)
 
     return data
 
