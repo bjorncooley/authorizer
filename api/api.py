@@ -69,25 +69,18 @@ def create_user():
     data = json.loads(request.data.decode('utf-8'))
     email = data["email"]
     password = data["password"]
-    first_name = None
-    last_name = None
-    user_type = None
-
-    if "first_name" in data:
-        first_name = data["first_name"]
-    if "last_name" in data:
-        last_name = data["last_name"]
-    if "user_type" in data:
-        user_type = data["user_type"]
+    firstName = data.get("firstName", None)
+    lastName = data.get("lastName", None)
+    userType = data.get("userType", None)
 
     db = DatabaseService()
     try:
         db.save_user(
             email=email, 
             password=password,
-            first_name=first_name,
-            last_name=last_name,
-            user_type=user_type,
+            firstName=firstName,
+            lastName=lastName,
+            userType=userType,
         )
     except SQLIntegrityError:
         return make_response("User %s already exists" % data["email"], 409)
@@ -162,9 +155,9 @@ def get_profile():
     user = db.get_user(email)
     formattedUser = {
         "email": user["email"],
-        "firstName": user["first_name"],
-        "lastName": user["last_name"],
-        "userType": user["user_type"],
+        "firstName": user["firstName"],
+        "lastName": user["lastName"],
+        "userType": user["userType"],
     }
     return jsonify(formattedUser)
 
@@ -186,15 +179,15 @@ def login():
         )
 
     db = DatabaseService()
-    user_type = db.authenticate_user(
+    userType = db.authenticate_user(
         email=data["email"], 
         password=data["password"],
     )
-    if not user_type:
+    if not userType:
         return make_response("Error: invalid credentials", 401)
 
     token = jwt.encode(
-        {"subject": data["email"], "user_type": user_type},
+        {"subject": data["email"], "userType": userType},
         app.config["SECRET_KEY"],
         algorithm="HS256",
     )

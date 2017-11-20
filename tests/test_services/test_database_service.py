@@ -87,21 +87,21 @@ class TestDatabaseService(BaseTest):
     def test_database_service_saves_first_and_last_name(self):
         email = 'test@example.com'
         password = 'testpass'
-        first_name = 'First'
-        last_name = 'Last'
+        firstName = 'First'
+        lastName = 'Last'
         self.db.save_user(
             email=email,
             password=password,
-            first_name=first_name,
-            last_name=last_name,
+            firstName=firstName,
+            lastName=lastName,
         )
 
         query = "SELECT first_name, last_name FROM users"
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertEqual(first_name, results[0][0])
-        self.assertEqual(last_name, results[0][1])
+        self.assertEqual(firstName, results[0][0])
+        self.assertEqual(lastName, results[0][1])
         curr.close()
 
 
@@ -137,15 +137,15 @@ class TestDatabaseService(BaseTest):
     def test_database_service_returns_user_type_after_authorizing(self):
         email = 'test@example.com'
         password = 'testpass'
-        user_type = 'testtype'
+        userType = 'testtype'
         self.db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
+            userType=userType,
         )
 
         result = self.db.authenticate_user(email=email, password=password)
-        self.assertEqual(user_type, result)
+        self.assertEqual(userType, result)
 
 
     def test_database_service_handles_nonexistent_user(self):
@@ -158,29 +158,29 @@ class TestDatabaseService(BaseTest):
     def test_database_service_creates_user_with_correct_user_type(self):
         email = 'test@example.com'
         password = 'testpass'
-        user_type = 'testtype'
+        userType = 'testtype'
         self.db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
+            userType=userType,
         )
 
         query = "SELECT user_type FROM users"
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertEqual(user_type, results[0][0])
+        self.assertEqual(userType, results[0][0])
         curr.close()
 
 
     def test_database_service_can_return_user_data(self):
         email = 'test@example.com'
         password = 'testpass'
-        user_type = 'testtype'
+        userType = 'testtype'
         self.db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
+            userType=userType,
         )
 
         user = self.db.get_user(email=email)
@@ -190,22 +190,22 @@ class TestDatabaseService(BaseTest):
     def test_database_service_returns_correct_user_data_on_get_user(self):
         email = 'test@example.com'
         password = 'testpass'
-        user_type = 'testtype'
-        first_name = 'First'
-        last_name = 'Last'
+        userType = 'testtype'
+        firstName = 'First'
+        lastName = 'Last'
         self.db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
-            first_name=first_name,
-            last_name=last_name,
+            userType=userType,
+            firstName=firstName,
+            lastName=lastName,
         )
 
         user = self.db.get_user(email=email)
         self.assertEqual(user['email'], email)
-        self.assertEqual(user['first_name'], first_name)
-        self.assertEqual(user['last_name'], last_name)
-        self.assertEqual(user['user_type'], user_type)
+        self.assertEqual(user['firstName'], firstName)
+        self.assertEqual(user['lastName'], lastName)
+        self.assertEqual(user['userType'], userType)
 
 
     def test_database_service_can_save_reset_token(self):

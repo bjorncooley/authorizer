@@ -36,16 +36,16 @@ class TestProfile(BaseTest):
         db = DatabaseService()
         email = "test@example.com"
         password = "testpass"
-        first_name = "First"
-        last_name = "Last"
-        user_type = "testtype"
+        firstName = "First"
+        lastName = "Last"
+        userType = "testtype"
 
         db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
-            first_name=first_name,
-            last_name=last_name,
+            userType=userType,
+            firstName=firstName,
+            lastName=lastName,
         )
         
         result = self.get_request_with_token("/api/v1/profile/get")
@@ -61,21 +61,21 @@ class TestProfile(BaseTest):
         db = DatabaseService()
         email = "test@example.com"
         password = "testpass"
-        first_name = "First"
-        last_name = "Last"
-        user_type = "testtype"
+        firstName = "First"
+        lastName = "Last"
+        userType = "testtype"
 
         db.save_user(
             email=email,
             password=password,
-            user_type=user_type,
-            first_name=first_name,
-            last_name=last_name,
+            userType=userType,
+            firstName=firstName,
+            lastName=lastName,
         )
 
         result = self.get_request_with_token("/api/v1/profile/get")
         data = json.loads(result.data)
         self.assertEqual(data["email"], email)
-        self.assertEqual(data["userType"], user_type)
-        self.assertEqual(data["firstName"], first_name)
-        self.assertEqual(data["lastName"], last_name)
+        self.assertEqual(data["userType"], userType)
+        self.assertEqual(data["firstName"], firstName)
+        self.assertEqual(data["lastName"], lastName)

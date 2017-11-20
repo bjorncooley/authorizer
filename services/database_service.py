@@ -82,9 +82,9 @@ class DatabaseService:
         user = None
         if row is not None:
             user = {}
-            user["first_name"] = row[0]
-            user["last_name"] = row[1]
-            user["user_type"] = row[2]
+            user["firstName"] = row[0]
+            user["lastName"] = row[1]
+            user["userType"] = row[2]
             user["email"] = email
         return user
 
@@ -100,22 +100,23 @@ class DatabaseService:
         self.conn.execute(i)
 
 
-    def save_user(self, email, password, user_type=None, first_name=None, last_name=None):
+    def save_user(self, email, password, userType=None, firstName=None, lastName=None):
         assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
-        # set default user_type to student
-        if user_type is None:
-            user_type = "applicant"
+        # set default userType to student
+        if userType is None:
+            userType = "applicant"
 
         hashedPassword = generate_password_hash(password)
 
+        # postgres is case-insensitive, so switch from camel case to underscore
         i = self.users.insert().values(
             email=email,
             password=hashedPassword,
-            first_name=first_name,
-            last_name=last_name,
-            user_type=user_type,
+            first_name=firstName,
+            last_name=lastName,
+            user_type=userType,
         )
         result = self.conn.execute(i)
 

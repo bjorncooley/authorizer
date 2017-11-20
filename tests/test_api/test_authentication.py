@@ -59,7 +59,7 @@ class TestAPI(BaseTest):
             token = data["token"]
             decoded = jwt.decode(token, api_config.SECRET_KEY, algorithms=["HS256"])
             subject = decoded["subject"]
-            user_type = decoded["user_type"]
+            userType = decoded["userType"]
         except:
             decoded = None
         self.assertIsNotNone(decoded)

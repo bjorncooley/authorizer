@@ -91,14 +91,14 @@ class TestAPI(BaseTest):
     def test_create_user_creates_user_with_correct_first_and_last_name(self):
         email = "test@example.com"
         password = "testpass"
-        first_name = "First"
-        last_name = "Last"
+        firstName = "First"
+        lastName = "Last"
 
         data = json.dumps({
             "email": email, 
             "password": password,
-            "first_name": first_name,
-            "last_name": last_name,
+            "firstName": firstName,
+            "lastName": lastName,
         })
         result = self.app.post("/api/v1/create-user", data=data)
 
@@ -106,8 +106,8 @@ class TestAPI(BaseTest):
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertEqual(first_name, results[0][0])
-        self.assertEqual(last_name, results[0][1])
+        self.assertEqual(firstName, results[0][0])
+        self.assertEqual(lastName, results[0][1])
 
 
     def test_create_user_creates_user_as_applicant_by_default(self):
