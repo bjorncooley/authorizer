@@ -106,7 +106,7 @@ class DatabaseService:
 
         # set default user_type to student
         if user_type is None:
-            user_type = "student"
+            user_type = "applicant"
 
         hashedPassword = generate_password_hash(password)
 

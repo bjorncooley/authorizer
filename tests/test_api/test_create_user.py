@@ -110,7 +110,7 @@ class TestAPI(BaseTest):
         self.assertEqual(last_name, results[0][1])
 
 
-    def test_create_user_creates_user_as_student_by_default(self):
+    def test_create_user_creates_user_as_applicant_by_default(self):
         email = "test@example.com"
         password = "testpass"
 
@@ -121,5 +121,5 @@ class TestAPI(BaseTest):
         curr = self.conn.cursor()
         curr.execute(query)
         results = curr.fetchall()
-        self.assertEqual("student", results[0][0])
+        self.assertEqual("applicant", results[0][0])
 
