@@ -5,6 +5,8 @@ from flask import make_response
 from raven import Client
 import requests
 
+RAVEN_CLIENT='https://64f3e336e3304697a688fb7b6d954e3d:ea8bd37d4fd441ad98929d999c1fdca7@sentry.io/249409'
+
 
 def get_endpoint(endpoint):
     SANDBOX_MAILGUN_KEY = "key-744ac88580d33c9c7a44e28956ff0182"
@@ -43,9 +45,7 @@ def get_request_data(request, required_params):
 def handle_error(message, logger, status_code=500):
     env = os.getenv("ENV", "test")
     if env is not "test":
-        client = Client(
-            'https://2cd51de9a97b4ed28bd75e157edd9982:f76db1d5f4cd4bd389c826e4914a3c24@sentry.io/249394'
-        )
+        client = Client(RAVEN_CLIENT)
         client.captureMessage(
             "%s in authorizer %s: %s" % (
             status_code, os.getenv("ENV", "test"), message)
