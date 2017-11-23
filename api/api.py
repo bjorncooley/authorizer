@@ -61,12 +61,19 @@ def check_params(request, required_fields):
 
 @app.route("/api/v1/create-user", methods=["POST"])
 def create_user():
-    
-    error = check_params(request, ["email", "password"])
-    if error:
-        return error
 
-    data = json.loads(request.data.decode('utf-8'))
+    try:
+        data = get_request_data(
+            request,
+            required_params=["email", "password"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message="%s: %s" % (request.url, str(e)),
+            logger=logger,
+            status_code=422,
+        )
+    
     email = data["email"]
     password = data["password"]
     firstName = data.get("firstName", None)
@@ -97,7 +104,7 @@ def confirm_validation_token():
         )
     except (ValueError, TypeError) as e:
         return handle_error(    
-            message=str(e),
+            message="%s: %s" % (request.url, str(e)),
             logger=logger,
             status_code=422,
         )
@@ -121,7 +128,7 @@ def create_validation_token():
         )
     except (ValueError, TypeError) as e:
         return handle_error(    
-            message=str(e),
+            message="%s: %s" % (request.url, str(e)),
             logger=logger,
             status_code=422,
         )
@@ -204,7 +211,7 @@ def forgot_password():
         )
     except (ValueError, TypeError) as e:
         return handle_error(    
-            message=str(e),
+            message="%s: %s" % (request.url, str(e)),
             logger=logger,
             status_code=422,
         )
@@ -231,11 +238,18 @@ def forgot_password():
 
 @app.route("/api/v1/reset-password", methods=["POST"])
 def reset_password():
-    error = check_params(request, ["token", "password", "passwordCheck"])
-    if error:
-        return error
+    try:
+        data = get_request_data(
+            request,
+            required_params=["token", "password", "passwordCheck"],
+        )
+    except (ValueError, TypeError) as e:
+        return handle_error(    
+            message="%s: %s" % (request.url, str(e)),
+            logger=logger,
+            status_code=422,
+        )
 
-    data = json.loads(request.data.decode('utf-8'))
     token = data["token"]
     password = data["password"]
     password_check = data["passwordCheck"]

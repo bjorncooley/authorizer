@@ -2,6 +2,7 @@ import json
 import os
 
 from flask import make_response
+from raven import Client
 import requests
 
 
@@ -40,6 +41,15 @@ def get_request_data(request, required_params):
 
 
 def handle_error(message, logger, status_code=500):
+    env = os.getenv("ENV", "test")
+    if env is not "test":
+        client = Client(
+            'https://2cd51de9a97b4ed28bd75e157edd9982:f76db1d5f4cd4bd389c826e4914a3c24@sentry.io/249394'
+        )
+        client.captureMessage(
+            "%s in authorizer %s: %s" % (
+            status_code, os.getenv("ENV", "test"), message)
+        )
     logger.error(message)
     return make_response(message, status_code)
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+export ENV=dev
 export WORKON_HOME="~/.virtualenvs"
 export VIRTUALENVWRAPPER_PYTHON='/usr/local/bin/python3'
 source /usr/local/bin/virtualenvwrapper.sh
