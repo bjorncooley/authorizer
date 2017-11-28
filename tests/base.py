@@ -56,4 +56,4 @@ class BaseTest(unittest.TestCase):
         curr.execute(query)
         self.conn.commit()
         self.conn.close()
-        time.sleep(0.01)
+        time.sleep(0.02)
