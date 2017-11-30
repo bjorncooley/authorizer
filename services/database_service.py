@@ -23,7 +23,7 @@ class DatabaseService:
         assert password != "", "Password must not be empty"
 
         q = select([self.users.c.password, self.users.c.user_type]).where(
-            self.users.c.email == email
+            self.users.c.email == email.lower()
         )
         result = self.conn.execute(q)
         row = result.fetchone()

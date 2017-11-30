@@ -105,3 +105,27 @@ class TestAPI(BaseTest):
         data = json.dumps({"email": email, "password": "wrongpassword"})
         result = self.app.post("/api/v1/login", data=data)
         self.assertEqual(result.status_code, 401)
+
+
+    def test_login_handles_uppercase_email(self):
+        db = DatabaseService()
+        email = "test@example.com"
+        uppercaseEmail = "TEST@example.com"
+        password = "testpass"
+        db.save_user(email=email, password=password)
+
+        data = json.dumps({"email": uppercaseEmail, "password": password})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 200)
+
+
+    def test_login_handles_email_with_different_create_and_login_casing(self):
+        db = DatabaseService()
+        email = "Test@example.com"
+        uppercaseEmail = "TEST@example.com"
+        password = "testpass"
+        db.save_user(email=email, password=password)
+
+        data = json.dumps({"email": uppercaseEmail, "password": password})
+        result = self.app.post("/api/v1/login", data=data)
+        self.assertEqual(result.status_code, 200)
