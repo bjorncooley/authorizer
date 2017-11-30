@@ -112,7 +112,7 @@ class DatabaseService:
 
         # postgres is case-insensitive, so switch from camel case to underscore
         i = self.users.insert().values(
-            email=email,
+            email=email.lower(),
             password=hashedPassword,
             first_name=firstName,
             last_name=lastName,

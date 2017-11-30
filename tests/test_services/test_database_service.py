@@ -52,6 +52,23 @@ class TestDatabaseService(BaseTest):
         curr.close()
 
 
+    def test_database_service_saves_email_as_lowercase(self):
+        email = 'TEST@example.com'
+        lowercaseEmail = 'test@example.com'
+        password = 'testpass'
+        self.db.save_user(
+            email=email,
+            password=password,
+        )
+
+        query = "SELECT email FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(lowercaseEmail, results[0][0])
+        curr.close()
+
+
     def test_database_service_saves_hashed_password(self):
         email = 'test@example.com'
         password = 'testpass'
