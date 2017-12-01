@@ -46,6 +46,7 @@ class BaseTest(unittest.TestCase):
 
 
     def tearDown(self):
+        time.sleep(0.01)
         self.server.shutdown_server()
         curr = self.conn.cursor()
         query = "DELETE FROM users"
@@ -56,4 +57,4 @@ class BaseTest(unittest.TestCase):
         curr.execute(query)
         self.conn.commit()
         self.conn.close()
-        time.sleep(0.02)
+        time.sleep(0.01)
