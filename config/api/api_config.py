@@ -6,5 +6,3 @@ class APIConfig:
     MAILGUN_KEY = os.getenv("MAILGUN_KEY", SANDBOX_MAILGUN_KEY)
     MAILGUN_URL = os.getenv("MAILGUN_URL", SANDBOX_MAILGUN_URL)
     SECRET_KEY = os.getenv("SECRET_KEY", "notarealsecretkey")
-
-
