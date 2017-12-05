@@ -104,7 +104,6 @@ class DatabaseService:
         assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
-        # set default userType to student
         if userType is None:
             userType = "applicant"
 
