@@ -17,22 +17,22 @@ class TestAPI(BaseTest):
         super(TestAPI, self).tearDown()
 
 
-    def test_user_exists_returns_404_if_not_user(self):
-        db = DatabaseService()
-        result = self.app.get("/api/v1/user-exists?email=%s" 
-                              % "invalid@example.com")
-        self.assertEqual(result.status_code, 404)
-
-
     def test_user_exists_returns_200_if_user_exists(self):
         email = "test@example.com"
         password = "testpass"
         db = DatabaseService()
         db.save_user(email=email, password=password)
-        
+
         result = self.app.get("/api/v1/user-exists?email=%s" 
                               % "test@example.com")
         self.assertEqual(result.status_code, 200)
+
+
+    def test_user_exists_returns_404_if_not_user(self):
+        db = DatabaseService()
+        result = self.app.get("/api/v1/user-exists?email=%s" 
+                              % "invalid@example.com")
+        self.assertEqual(result.status_code, 404)
 
 
     def test_login_returns_200_with_valid_credentials(self):

@@ -1,9 +1,13 @@
 import json
+import logging
 import os
 
 from flask import make_response
 from raven import Client
 import requests
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 RAVEN_CLIENT='https://64f3e336e3304697a688fb7b6d954e3d:ea8bd37d4fd441ad98929d999c1fdca7@sentry.io/249409'
 
@@ -42,7 +46,7 @@ def get_request_data(request, required_params):
     return data
 
 
-def handle_error(message, logger, status_code=500):
+def handle_error(message, status_code=500, logger=logger):
     env = os.getenv("ENV", "test")
     if env is not "test":
         client = Client(RAVEN_CLIENT)

@@ -1,4 +1,3 @@
-import logging
 from pprint import pprint
 import os
 import random
@@ -31,7 +30,6 @@ from services.database_service import DatabaseService
 app = Flask(__name__)
 app.config.from_object("config.api.api_config.APIConfig")
 CORS(app)
-logger = logging.getLogger()
 
 
 # Pull into separate lib
@@ -68,11 +66,7 @@ def create_user():
             required_params=["email", "password"],
         )
     except (ValueError, TypeError) as e:
-        return handle_error(    
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
     
     email = data["email"]
     password = data["password"]
@@ -103,11 +97,7 @@ def confirm_validation_token():
             required_params=["token"],
         )
     except (ValueError, TypeError) as e:
-        return handle_error(    
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
 
     try:
         email = DatabaseService().confirm_validation_token(data["token"])
@@ -127,11 +117,7 @@ def create_validation_token():
             required_params=["email"],
         )
     except (ValueError, TypeError) as e:
-        return handle_error(    
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
 
     token = DatabaseService().create_validation_token(email=data["email"])
     if token is None:
@@ -179,11 +165,7 @@ def login():
     try:
         data = get_request_data(request, ["email", "password"])
     except (ValueError, TypeError) as e:
-        return handle_error(
-            message="Invalid parameters: %s" % str(e),
-            logger=logger,
-            status_code=422
-        )
+        return handle_error("Invalid parameters: %s" % str(e), 422)
 
     db = DatabaseService()
     userType = db.authenticate_user(
@@ -210,11 +192,7 @@ def forgot_password():
             required_params=["email", "resetURL"],
         )
     except (ValueError, TypeError) as e:
-        return handle_error(    
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
 
     token = uuid.uuid4().hex
     mailgun_response = send_reset_link(
@@ -244,11 +222,7 @@ def reset_password():
             required_params=["token", "password", "passwordCheck"],
         )
     except (ValueError, TypeError) as e:
-        return handle_error(    
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
 
     token = data["token"]
     password = data["password"]
@@ -275,12 +249,8 @@ def user_exists():
             required_params=["email"],
         )
     except(ValueError, TypeError) as e:
-        return handle_error(
-            message="%s: %s" % (request.url, str(e)),
-            logger=logger,
-            status_code=422,
-        )
-        
+        return handle_error("%s: %s" % (request.url, str(e)), 422)
+
     db = DatabaseService()
     if db.get_user(data["email"]):
         return make_response("OK", 200)
