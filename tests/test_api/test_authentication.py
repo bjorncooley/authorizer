@@ -28,6 +28,11 @@ class TestAPI(BaseTest):
         self.assertEqual(result.status_code, 200)
 
 
+    def test_user_exists_returns_422_if_no_data(self):
+        result = self.app.get("/api/v1/user-exists")
+        self.assertEqual(result.status_code, 422)
+
+
     def test_user_exists_returns_404_if_not_user(self):
         db = DatabaseService()
         result = self.app.get("/api/v1/user-exists?email=%s" 
