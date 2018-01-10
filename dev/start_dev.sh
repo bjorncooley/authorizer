@@ -9,6 +9,8 @@ export DBUSER=local_admin
 export DBPASS=default
 export DBNAME=missionu_main_dev
 export DBHOST=localhost
+
+export FLASK_DEBUG=1
 export FLASK_APP=api/api.py
 export SECRET_KEY="notarealsecretkey"
 
