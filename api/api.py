@@ -266,3 +266,23 @@ def reset_password():
 
     return make_response("OK", 200)
 
+
+@app.route("/api/v1/user-exists", methods=["GET"])
+def user_exists():
+    try:
+        data = get_request_data(
+            request,
+            required_params=["email"],
+        )
+    except(ValueError, TypeError) as e:
+        return handle_error(
+            message="%s: %s" % (request.url, str(e)),
+            logger=logger,
+            status_code=422,
+        )
+        
+    db = DatabaseService()
+    if db.get_user(data["email"]):
+        return make_response("OK", 200)
+    return make_response("Not found", 404)
+
