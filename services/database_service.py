@@ -71,6 +71,7 @@ class DatabaseService:
         assert email != "", "email must not be empty"
 
         q = select([
+            self.users.c.cohort,
             self.users.c.first_name,
             self.users.c.last_name,
             self.users.c.user_type]
@@ -82,9 +83,10 @@ class DatabaseService:
         user = None
         if row is not None:
             user = {}
-            user["firstName"] = row[0]
-            user["lastName"] = row[1]
-            user["userType"] = row[2]
+            user["cohort"] = row[0]
+            user["firstName"] = row[1]
+            user["lastName"] = row[2]
+            user["userType"] = row[3]
             user["email"] = email
         return user
 

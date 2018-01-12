@@ -289,3 +289,11 @@ class TestDatabaseService(BaseTest):
         savedCohort = results[0][0]
         self.assertEqual(savedCohort, cohort)
 
+
+    def test_get_user_gets_cohort_for_student_users(self):
+        email = 'test@example.com'
+        cohort = 2
+        self.db.save_user(email=email, password="testpass", cohort=cohort)
+        user = self.db.get_user(email)
+        self.assertEqual(user["cohort"], cohort)
+
