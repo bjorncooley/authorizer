@@ -297,3 +297,10 @@ class TestDatabaseService(BaseTest):
         user = self.db.get_user(email)
         self.assertEqual(user["cohort"], cohort)
 
+
+    def test_get_user_returns_none_for_cohort_if_no_cohort(self):
+        email = 'test@example.com'
+        self.db.save_user(email=email, password="testpass")
+        user = self.db.get_user(email)
+        self.assertIsNone(user["cohort"])
+
