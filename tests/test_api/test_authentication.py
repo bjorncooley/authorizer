@@ -51,7 +51,7 @@ class TestAPI(BaseTest):
         db = DatabaseService()
         api_config = APIConfig()
         db.save_user(email=email, password=password)
-        data = json.dumps({"email": "test@example.com", "password": "testpass"})
+        data = json.dumps({ "email": email, "password": password })
 
         result = self.app.post("/api/v1/login", data=data)
         try:
@@ -63,6 +63,26 @@ class TestAPI(BaseTest):
         except:
             decoded = None
         self.assertIsNotNone(decoded)
+
+
+    def test_jwt_token_contains_cohort_if_user_type_is_student(self):
+        cohort = 1
+        email = "test@example.com"
+        password = "testpass"
+        db = DatabaseService()
+        api_config = APIConfig()
+        db.save_user(email=email, password=password, userType="student", cohort=cohort)
+        data = json.dumps({ "email": email, "password": password })
+
+        result = self.app.post("/api/v1/login", data=data)
+        try:
+            data = json.loads(result.data)
+            token = data["token"]
+            decoded = jwt.decode(token, api_config.SECRET_KEY, algorithms=["HS256"])
+            savedCohort = decoded["cohort"]
+        except:
+            decoded = None
+        self.assertEqual(savedCohort, cohort)
 
 
     def test_login_returns_422_if_no_data(self):

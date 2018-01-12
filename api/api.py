@@ -193,8 +193,16 @@ def login():
     if not userType:
         return make_response("Error: invalid credentials", 401)
 
+    # add user data to encoded token
+    tokenData = {
+        "subject": data["email"],
+        "userType": userType,
+    }
+    if userType == "student":
+        tokenData["cohort"] = db.get_user(data["email"])["cohort"]
+
     token = jwt.encode(
-        {"subject": data["email"], "userType": userType},
+        tokenData,
         app.config["SECRET_KEY"],
         algorithm="HS256",
     )
