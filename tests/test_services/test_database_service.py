@@ -275,3 +275,17 @@ class TestDatabaseService(BaseTest):
         second_password = results[0][0]
 
         self.assertNotEqual(first_password, second_password)
+
+
+    def test_database_service_can_save_cohort(self):
+        email = 'test@example.com'
+        cohort = 2
+        self.db.save_user(email=email, password="testpass", cohort=cohort)
+        query = "SELECT cohort FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        curr.close()
+        savedCohort = results[0][0]
+        self.assertEqual(savedCohort, cohort)
+

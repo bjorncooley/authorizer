@@ -100,7 +100,8 @@ class DatabaseService:
         self.conn.execute(i)
 
 
-    def save_user(self, email, password, userType=None, firstName=None, lastName=None):
+    def save_user(self, email, password, userType=None, 
+                  firstName=None, lastName=None, cohort=None):
         assert email != "", "email must not be empty"
         assert password != "", "Password must not be empty"
 
@@ -111,10 +112,11 @@ class DatabaseService:
 
         # postgres is case-insensitive, so switch from camel case to underscore
         i = self.users.insert().values(
+            cohort=cohort,
             email=email.lower(),
-            password=hashedPassword,
             first_name=firstName,
             last_name=lastName,
+            password=hashedPassword,
             user_type=userType,
         )
         result = self.conn.execute(i)
