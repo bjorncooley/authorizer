@@ -70,6 +70,7 @@ def create_user():
     
     email = data["email"]
     password = data["password"]
+    cohort = data.get("cohort", None)
     firstName = data.get("firstName", None)
     lastName = data.get("lastName", None)
     userType = data.get("userType", None)
@@ -79,6 +80,7 @@ def create_user():
         db.save_user(
             email=email, 
             password=password,
+            cohort=cohort,
             firstName=firstName,
             lastName=lastName,
             userType=userType,

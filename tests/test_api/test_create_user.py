@@ -123,3 +123,20 @@ class TestAPI(BaseTest):
         results = curr.fetchall()
         self.assertEqual("applicant", results[0][0])
 
+
+    def test_create_user_accepts_cohort_as_parameter(self):
+        cohort = 2
+        email = "test@example.com"
+        data = json.dumps({
+            "cohort": cohort,
+            "email": email,
+            "password": "mypass",
+        })
+        self.app.post("/api/v1/create-user", data=data)
+
+        query = "SELECT cohort FROM users"
+        curr = self.conn.cursor()
+        curr.execute(query)
+        results = curr.fetchall()
+        self.assertEqual(cohort, results[0][0])
+
