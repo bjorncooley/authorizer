@@ -11,7 +11,7 @@ from sqlalchemy import (
     Table,
 )
 
-LOCAL_DBUSER = "local_admin"
+LOCAL_DBUSER = "authorizer_admin"
 LOCAL_DBPASS = "default"
 LOCAL_DBNAME = "authorizer_test"
 LOCAL_DBHOST = "localhost"
